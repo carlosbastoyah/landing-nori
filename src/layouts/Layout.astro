@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	canonical?: string;
+	image?: string;
+	noindex?: boolean;
+}
+
+const {
+	title = 'Nori | Software para laboratorios clinicos y de patologia',
+	description = 'Digitaliza estudios, casos y reportes clinicos y de patologia con flujos trazables, colaboracion clinica y seguridad de nivel medico.',
+	canonical,
+	image = '/nori/screenshot-dashboard.png',
+	noindex = false,
+} = Astro.props;
+
+const siteOrigin = Astro.site ? new URL(Astro.site).origin : Astro.url.origin;
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteOrigin).toString();
+const ogImage = image.startsWith('http') ? image : new URL(image, siteOrigin).toString();
+
+const jsonLd = JSON.stringify([
+	{
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: 'Nori',
+		url: canonicalUrl,
+		logo: `${siteOrigin}/nori/nori-lockup-horizontal-gradient.svg`,
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'SoftwareApplication',
+		name: 'Nori',
+		applicationCategory: 'HealthApplication',
+		description,
+		operatingSystem: 'Web',
+		url: canonicalUrl,
+		image: ogImage,
+	},
+]);
+---
+
+<!doctype html>
+<html lang="es-MX">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+		<link rel="canonical" href={canonicalUrl} />
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,600;1,9..144,420&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<meta property="og:locale" content="es_MX" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:site_name" content="Nori" />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<title>{title}</title>
+		<script type="application/ld+json" set:html={jsonLd}></script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

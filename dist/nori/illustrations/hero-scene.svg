@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 720" role="img" aria-labelledby="title desc">
+  <title id="title">Escena editorial de Nori</title>
+  <desc id="desc">Ilustracion decorativa con paneles, tarjetas y formas suaves inspirada en una interfaz clinica moderna.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f9fefd"/>
+      <stop offset="1" stop-color="#eaf7f4"/>
+    </linearGradient>
+    <linearGradient id="blob" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9f0e4"/>
+      <stop offset="1" stop-color="#a9e0c3"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f4fbf9"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4d8b90"/>
+      <stop offset="1" stop-color="#1f5f68"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#0e4952" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <rect width="880" height="720" rx="42" fill="url(#bg)"/>
+  <path d="M645 84c67 0 121 58 121 129s-54 149-121 149c-50 0-75-16-135-16s-121 42-175 42c-90 0-158-72-158-164S243 59 336 59c54 0 88 26 138 26 59 0 106-1 171-1z" fill="url(#blob)" opacity="0.85"/>
+  <circle cx="700" cy="98" r="30" fill="#ffffff" opacity="0.7"/>
+  <circle cx="204" cy="146" r="24" fill="#a9e0c3" opacity="0.55"/>
+  <rect x="404" y="118" width="296" height="214" rx="28" fill="url(#panel)" filter="url(#shadow)"/>
+  <rect x="404" y="118" width="296" height="38" rx="28" fill="#e8f5f1"/>
+  <circle cx="438" cy="137" r="7" fill="#a9e0c3"/>
+  <circle cx="460" cy="137" r="7" fill="#d9f0e4"/>
+  <circle cx="482" cy="137" r="7" fill="#4d8b90" opacity="0.35"/>
+  <rect x="438" y="184" width="126" height="88" rx="20" fill="#dff3ed"/>
+  <rect x="582" y="184" width="84" height="18" rx="9" fill="#c9e8df"/>
+  <rect x="582" y="216" width="66" height="18" rx="9" fill="#4d8b90" opacity="0.24"/>
+  <rect x="582" y="248" width="96" height="18" rx="9" fill="#c9e8df"/>
+  <path d="M458 244c24-20 45-30 68-40 13 12 23 28 30 52-26 12-58 17-98 16z" fill="url(#accent)" opacity="0.85"/>
+  <rect x="296" y="336" width="270" height="200" rx="30" fill="#fefefe" filter="url(#shadow)"/>
+  <rect x="296" y="336" width="270" height="28" rx="14" fill="#edf8f5"/>
+  <rect x="332" y="394" width="198" height="104" rx="22" fill="#0e4952"/>
+  <rect x="356" y="416" width="78" height="14" rx="7" fill="#d9f0e4" opacity="0.8"/>
+  <rect x="356" y="442" width="124" height="14" rx="7" fill="#d9f0e4" opacity="0.46"/>
+  <circle cx="476" cy="446" r="28" fill="#a9e0c3"/>
+  <path d="M434 510c36-24 58-30 96-34 16 23 20 42 22 60H314c18-12 42-21 120-26z" fill="#e7f6f2"/>
+  <rect x="604" y="372" width="170" height="128" rx="28" fill="#ffffff" filter="url(#shadow)"/>
+  <rect x="636" y="410" width="106" height="18" rx="9" fill="#d9f0e4"/>
+  <rect x="636" y="442" width="84" height="18" rx="9" fill="#a9e0c3"/>
+  <rect x="636" y="474" width="120" height="18" rx="9" fill="#4d8b90" opacity="0.25"/>
+  <circle cx="676" cy="302" r="28" fill="#fff" filter="url(#shadow)"/>
+  <path d="M662 302c0-8 6-14 14-14 7 0 13 5 14 12 0 16-16 22-27 31-11-8-19-14-19-22 0-9 7-15 15-15 4 0 7 1 10 4 2-2 5-3 8-3-8 0-15 6-15 15z" fill="#a9e0c3"/>
+  <g fill="#4d8b90" opacity="0.34">
+    <rect x="126" y="420" width="92" height="18" rx="9"/>
+    <rect x="126" y="456" width="72" height="18" rx="9"/>
+    <rect x="126" y="492" width="116" height="18" rx="9"/>
+  </g>
+  <g fill="none" stroke="#4d8b90" stroke-width="10" stroke-linecap="round" opacity="0.3">
+    <path d="M146 210l26 26"/>
+    <path d="M746 556l24 24"/>
+    <path d="M128 238l36 0"/>
+  </g>
+</svg>
