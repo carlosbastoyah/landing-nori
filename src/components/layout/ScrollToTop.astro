@@ -1,0 +1,27 @@
+<button
+	type="button"
+	id="scroll-to-top"
+	class="fixed right-6 bottom-6 z-50 flex h-12 w-12 translate-y-16 items-center justify-center rounded-full bg-ocean-700 text-white opacity-0 shadow-lg transition-all duration-300 hover:bg-ink-deep"
+	aria-label="Volver arriba"
+>
+	<svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+		<path d="M0 10L1.7625 11.7625L8.75 4.7875V20H11.25V4.7875L18.225 11.775L20 10L10 0L0 10Z" fill="currentColor"
+		></path>
+	</svg>
+</button>
+
+<script>
+	const btn = document.getElementById('scroll-to-top');
+	if (btn) {
+		const onScroll = () => {
+			const visible = window.scrollY > 400;
+			btn.classList.toggle('translate-y-0', visible);
+			btn.classList.toggle('opacity-100', visible);
+			btn.classList.toggle('translate-y-16', !visible);
+			btn.classList.toggle('opacity-0', !visible);
+		};
+		onScroll();
+		window.addEventListener('scroll', onScroll, { passive: true });
+		btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+	}
+</script>

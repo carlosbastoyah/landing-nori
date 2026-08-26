@@ -1,0 +1,79 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import { painPoints } from '../../data/content';
+---
+
+<section class="relative">
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="cs-card-style-1">
+			<div class="grid items-center gap-10 lg:grid-cols-12 lg:gap-y-12">
+				<div class="lg:col-span-5">
+					<div class="cs-card-thumb">
+						<img
+							src="/nori/template/about-img-1.png"
+							alt="Vista del producto Nori en operación diaria"
+							width="880"
+							height="560"
+							loading="lazy"
+						/>
+						<div class="cs-about-mask">
+							<img src="/nori/template/about-shape-1.png" alt="" aria-hidden="true" />
+						</div>
+						<div class="cs-elipse-1" aria-hidden="true"></div>
+					</div>
+				</div>
+				<div class="lg:col-span-7">
+					<div class="cs-card-content">
+						<div class="mb-7">
+							<SectionEyebrow label="Sobre Nori" />
+							<h2 class="cs-section-title mt-5">
+								Diseñado para la nueva generación de laboratorios clínicos
+							</h2>
+						</div>
+						<p class="mb-6 leading-relaxed text-ash-700">
+							Centraliza casos, automatiza flujos y acelera reportes con una plataforma moderna pensada para
+							equipos clínicos, técnicos y dirección.
+						</p>
+						<ul class="cs-list-style-1 mb-10">
+							{
+								painPoints.map((point) => (
+									<li>
+										<img src="/nori/template/icons/checkbox.svg" alt="" width="20" height="20" />
+										<h3 class="text-lg font-semibold text-ink">{point.title}</h3>
+									</li>
+								))
+							}
+						</ul>
+						<a href="/#producto" class="cs-btn-template">
+							<span>Conocer el producto</span>
+							<span class="cs-btn-icon" aria-hidden="true">
+								<svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+									<path
+										d="M1 6H13M13 6L8 1M13 6L8 11"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<img
+			src="/nori/decorative/star-shape.svg"
+			alt=""
+			class="cs-deco-star-1"
+			aria-hidden="true"
+		/>
+		<img
+			src="/nori/template/dna-shape.png"
+			alt=""
+			class="cs-deco-vector-1"
+			aria-hidden="true"
+		/>
+	</div>
+	<div class="cs-spacer-46"></div>
+</section>

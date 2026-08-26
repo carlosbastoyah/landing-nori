@@ -1,0 +1,65 @@
+---
+import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
+---
+
+<section id="cta" class="cs-cta-section">
+	<div
+		class="cs-cta-panel"
+		style="background-image: url('/nori/decorative/cta-bg-1.svg');"
+	>
+		<div class="h-[60px]"></div>
+		<div class="cs-container">
+			<div class="grid items-center gap-10 lg:grid-cols-2">
+				<div class="order-2 lg:order-1">
+					<div class="cs-cta-thumb">
+						<img
+							src="/nori/template/cta-img-1.png"
+							alt="App móvil de Nori"
+							width="1160"
+							height="1200"
+							loading="lazy"
+						/>
+					</div>
+				</div>
+				<div class="order-1 lg:order-2">
+					<h2 class="cs-section-title mb-5 capitalize text-white">
+						Listo para dejar el papeleo atrás y ganar velocidad clínica
+					</h2>
+					<p class="mb-8 text-lg text-white">
+						Agenda una sesión con nuestro equipo. Te mostramos un recorrido adaptado al flujo real de tu
+						laboratorio.
+					</p>
+					<div class="flex flex-wrap items-center gap-[30px]">
+						<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="cs-app-store-btn">
+							<span class="cs-btn-icon">
+								<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<path
+										d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L18 8l-9 9z"
+									></path>
+								</svg>
+							</span>
+							<div>
+								<p class="mb-0 text-[15px]">Contáctanos por</p>
+								<p class="mb-0 text-lg font-medium">WhatsApp</p>
+							</div>
+						</a>
+						<a href={PHONE_URL} class="cs-app-store-btn">
+							<span class="cs-btn-icon">
+								<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+									<path
+										d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.01l-2.2 2.22z"
+									></path>
+								</svg>
+							</span>
+							<div>
+								<p class="mb-0 text-[15px]">Llámanos</p>
+								<p class="mb-0 text-lg font-medium">+52 999 453 3797</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="h-[60px]"></div>
+	</div>
+</section>

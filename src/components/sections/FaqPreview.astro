@@ -1,0 +1,44 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import Accordion from '../ui/Accordion.astro';
+import { faqs } from '../../data/content';
+---
+
+<section class="relative overflow-hidden bg-[#ecf1f5]">
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+			<div class="order-2 lg:order-1">
+				<SectionEyebrow label="FAQ" />
+				<h2 class="cs-section-title mt-5">Preguntas frecuentes</h2>
+				<p class="mt-5 mb-14 leading-relaxed">
+					Resolvemos las dudas más comunes sobre implementación, precios y seguridad de Nori para tu laboratorio.
+				</p>
+				<Accordion items={faqs.slice(0, 3)} variant="template" />
+			</div>
+			<div class="relative order-1 lg:order-2">
+				<img
+					src="/nori/template/faq-img-1.png"
+					alt="Equipo de laboratorio consultando Nori"
+					class="w-full"
+					width="960"
+					height="640"
+					loading="lazy"
+				/>
+				<img
+					src="/nori/decorative/vector-5.svg"
+					alt=""
+					class="pointer-events-none absolute -right-8 -bottom-8 hidden w-32 opacity-50 lg:block"
+					aria-hidden="true"
+				/>
+				<img
+					src="/nori/decorative/star-shape.svg"
+					alt=""
+					class="pointer-events-none absolute -top-6 -left-6 hidden w-14 opacity-40 lg:block"
+					aria-hidden="true"
+				/>
+			</div>
+		</div>
+	</div>
+	<div class="cs-spacer-120"></div>
+</section>

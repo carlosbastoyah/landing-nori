@@ -1,0 +1,52 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import PricingCard from '../ui/PricingCard.astro';
+import { pricingPlans } from '../../data/content';
+
+const planIcons = [
+	'/nori/template/icons/free.svg',
+	'/nori/template/icons/dimond.svg',
+	'/nori/template/icons/crown.svg',
+];
+---
+
+<section id="precios" class="relative overflow-hidden">
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="relative z-[1] mx-auto mb-[60px] max-w-2xl text-center">
+			<SectionEyebrow label="Precios" class="justify-center" />
+			<h2 class="cs-section-title mt-5">Planes para cada etapa de tu laboratorio</h2>
+			<p class="mt-4 text-ash-700">
+				Elige el plan que mejor se adapte a tu operación. Todos incluyen demo personalizada y acompañamiento en la
+				implementación.
+			</p>
+		</div>
+		<div class="relative z-10 mt-14 grid gap-8 lg:grid-cols-3 lg:items-end">
+			{
+				pricingPlans.map((plan, index) => (
+					<PricingCard
+						name={plan.name}
+						description={plan.description}
+						priceLabel={plan.priceLabel}
+						features={plan.features}
+						cta={plan.cta}
+						featured={plan.featured}
+						icon={planIcons[index]}
+					/>
+				))
+			}
+		</div>
+		<div class="mt-8 text-center">
+			<a href="/precios" class="text-sm font-semibold text-ocean-700 underline-offset-4 hover:underline">
+				Comparar planes en detalle →
+			</a>
+		</div>
+		<img
+			src="/nori/decorative/vector-6.svg"
+			alt=""
+			class="pointer-events-none absolute right-0 bottom-20 hidden w-40 opacity-30 xl:block"
+			aria-hidden="true"
+		/>
+	</div>
+	<div class="cs-spacer-120"></div>
+</section>

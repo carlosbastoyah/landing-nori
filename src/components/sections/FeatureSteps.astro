@@ -1,0 +1,49 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import { steps } from '../../data/content';
+
+const stepLabels = ['Paso uno', 'Paso dos', 'Paso tres'];
+---
+
+<section id="flujo">
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="mx-auto mb-[47px] max-w-2xl text-center">
+			<SectionEyebrow label="Funcionalidades" class="justify-center" />
+			<h2 class="cs-section-title mt-5">De la solicitud al dictamen en un camino claro</h2>
+		</div>
+		<div class="cs-feature-steps">
+			{
+				steps.map((step, index) => (
+					<div class="cs-feature-step" data-feature-step>
+						<div class="cs-feature-step-index">
+							<span>{stepLabels[index]}</span>
+						</div>
+						<div class="cs-feature-step-line" aria-hidden="true" />
+						<div class="cs-feature-step-card text-center">
+							<img
+								src="/nori/decorative/border-shape.png"
+								alt=""
+								class="cs-border-shape"
+								aria-hidden="true"
+							/>
+							<h3 class="mb-2.5 text-2xl font-semibold">{step.title}</h3>
+							<p class="mb-0">{step.description}</p>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+	<div class="cs-spacer-120"></div>
+</section>
+
+<script>
+	document.querySelectorAll('[data-feature-step]').forEach((step, index) => {
+		if (index === 0) step.classList.add('active');
+		step.addEventListener('mouseenter', () => {
+			document.querySelectorAll('[data-feature-step]').forEach((s) => s.classList.remove('active'));
+			step.classList.add('active');
+		});
+	});
+</script>

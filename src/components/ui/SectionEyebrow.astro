@@ -1,0 +1,14 @@
+---
+interface Props {
+	label: string;
+	class?: string;
+}
+
+const { label, class: className = '' } = Astro.props;
+---
+
+<div class={`cs-section-subtitle ${className}`}>
+	<img src="/nori/template/icons/star-1.svg" alt="" width="16" height="16" aria-hidden="true" />
+	<span>{label}</span>
+	<img src="/nori/template/icons/star-1.svg" alt="" width="16" height="16" aria-hidden="true" />
+</div>

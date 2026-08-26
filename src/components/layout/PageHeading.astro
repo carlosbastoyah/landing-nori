@@ -1,0 +1,32 @@
+---
+interface Props {
+	title: string;
+	breadcrumb?: { label: string; href?: string }[];
+}
+
+const { title, breadcrumb = [{ label: 'Inicio', href: '/' }] } = Astro.props;
+---
+
+<section class="cs-page-heading pt-24 lg:pt-28">
+	<div class="cs-container">
+		{
+			breadcrumb.length > 0 && (
+				<nav class="mb-4 flex items-center justify-center gap-2 text-sm text-ash-500" aria-label="Breadcrumb">
+					{breadcrumb.map((item, i) => (
+						<>
+							{i > 0 && <span aria-hidden="true">/</span>}
+							{item.href ? (
+								<a href={item.href} class="transition hover:text-ink">
+									{item.label}
+								</a>
+							) : (
+								<span class="text-ink">{item.label}</span>
+							)}
+						</>
+					))}
+				</nav>
+			)
+		}
+		<h1 class="cs-section-title">{title}</h1>
+	</div>
+</section>

@@ -1,0 +1,46 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHeading from '../components/layout/PageHeading.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import Button from '../components/ui/Button.astro';
+import { faqs, WHATSAPP_URL } from '../data/content';
+---
+
+<MarketingLayout
+	title="Preguntas frecuentes | Nori"
+	description="Respuestas a las preguntas más comunes sobre Nori: implementación, precios, seguridad y migración para laboratorios clínicos."
+>
+	<PageHeading
+		title="Preguntas frecuentes"
+		breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'FAQ' }]}
+	/>
+
+	<section class="cs-section-gap">
+		<div class="cs-container">
+			<div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+				<div>
+					<p class="text-lg leading-relaxed text-ash-700">
+						Encuentra respuestas sobre implementación, precios, seguridad y migración. Si no encuentras lo que
+						buscas, contáctanos directamente.
+					</p>
+					<div class="mt-8">
+						<Button href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Hablar con el equipo</Button>
+					</div>
+					<div class="mt-10 overflow-hidden rounded-2xl">
+						<img
+							src="/nori/illustrations/feature-reports.svg"
+							alt="Reportería en Nori"
+							class="w-full"
+							width="960"
+							height="640"
+							loading="lazy"
+						/>
+					</div>
+				</div>
+				<div>
+					<Accordion items={faqs} allowMultiple />
+				</div>
+			</div>
+		</div>
+	</section>
+</MarketingLayout>

@@ -1,0 +1,17 @@
+---
+import CounterStat from '../ui/CounterStat.astro';
+import { stats } from '../../data/content';
+---
+
+<div class="cs-counter-wrap">
+	<div
+		class="cs-counter-panel"
+		style="background-image: url('/nori/template/counter-bg-1.svg');"
+	>
+		<div class="cs-container">
+			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+				{stats.map((stat) => <CounterStat value={stat.value} suffix={stat.suffix} label={stat.label} />)}
+			</div>
+		</div>
+	</div>
+</div>

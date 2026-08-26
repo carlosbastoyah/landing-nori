@@ -1,0 +1,98 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import { testimonials } from '../../data/content';
+---
+
+<section id="clientes" class="cs_testimonial relative overflow-hidden">
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="relative z-[1] mx-auto mb-12 max-w-2xl text-center">
+			<SectionEyebrow label="Casos reales" class="justify-center" />
+			<h2 class="cs-section-title mt-5">Laboratorios que necesitaban orden, hoy operan con claridad</h2>
+		</div>
+
+		<div class="testimonial_slider_content relative">
+			<div class="cs-testimonial-slider-wrap">
+				<div class="cs-testimonial-box-bg" aria-hidden="true">
+					<img src="/nori/template/testimonial-shape-1.svg" alt="" />
+				</div>
+
+				<div class="cs-testimonial-nav">
+					{
+						testimonials.map((item, index) => (
+							<button
+								type="button"
+								class={`cs-testimonial-nav-btn ${index === 0 ? 'is-active' : ''}`}
+								data-testimonial-nav={index}
+								aria-label={`Testimonio de ${item.name}`}
+							>
+								<img src={item.avatar} alt="" width="100" height="100" />
+							</button>
+						))
+					}
+				</div>
+
+				<div class="mt-10" id="testimonial-content">
+					{
+						testimonials.map((item, index) => (
+							<div class={`${index === 0 ? '' : 'hidden'}`} data-testimonial-slide={index}>
+								<div class="cs-testimonial-box">
+									<div class="mb-7">
+										<h3 class="mb-1 text-2xl font-semibold text-ink">{item.name}</h3>
+										<p class="mb-0 text-sm">{item.role}</p>
+									</div>
+									<blockquote class="cs-testimonial-quote">"{item.quote}"</blockquote>
+									<div class="cs-rating" aria-label="5 estrellas">
+										<div class="cs-rating-fill" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+						))
+					}
+				</div>
+			</div>
+
+			<img
+				src="/nori/template/trash-group.svg"
+				alt=""
+				class="pointer-events-none absolute top-20 right-[6%] hidden w-32 lg:block"
+				aria-hidden="true"
+			/>
+			<img
+				src="/nori/template/vector-4.svg"
+				alt=""
+				class="pointer-events-none absolute top-20 left-0 hidden w-20 lg:block"
+				aria-hidden="true"
+			/>
+			<div class="cs-testimonial-bubble right-[6%] bottom-[29%] h-5 w-5 bg-[#F16615]" aria-hidden="true"></div>
+			<div
+				class="cs-testimonial-bubble right-[4%] bottom-[20%] h-2.5 w-2.5 bg-mint-500"
+				style="animation-delay: 1s;"
+				aria-hidden="true"
+			></div>
+			<div
+				class="cs-testimonial-bubble right-[13%] bottom-[10%] h-3.5 w-3.5 bg-[#7341F1]"
+				style="animation-delay: 2s;"
+				aria-hidden="true"
+			></div>
+		</div>
+	</div>
+	<div class="cs-spacer-120"></div>
+</section>
+
+<script>
+	const navButtons = document.querySelectorAll('[data-testimonial-nav]');
+	const slides = document.querySelectorAll('[data-testimonial-slide]');
+
+	navButtons.forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const index = btn.getAttribute('data-testimonial-nav');
+			navButtons.forEach((b) => b.classList.remove('is-active'));
+			btn.classList.add('is-active');
+			slides.forEach((slide) => {
+				const slideIndex = slide.getAttribute('data-testimonial-slide');
+				slide.classList.toggle('hidden', slideIndex !== index);
+			});
+		});
+	});
+</script>

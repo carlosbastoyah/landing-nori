@@ -1,0 +1,63 @@
+---
+import Layout from './Layout.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import ScrollToTop from '../components/layout/ScrollToTop.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+}
+
+const { title, description, image } = Astro.props;
+---
+
+<Layout title={title} description={description} image={image}>
+	<SiteHeader />
+	<main>
+		<slot />
+	</main>
+	<SiteFooter />
+	<ScrollToTop />
+</Layout>
+
+<script>
+	function initCounters() {
+		const counters = document.querySelectorAll('[data-counter]');
+		if (!counters.length) return;
+
+		const animate = (el: HTMLElement) => {
+			const target = Number(el.dataset.countTo || 0);
+			const suffix = el.dataset.suffix || '';
+			const duration = 1800;
+			const start = performance.now();
+
+			const step = (now: number) => {
+				const progress = Math.min((now - start) / duration, 1);
+				const eased = 1 - Math.pow(1 - progress, 3);
+				const current = Math.round(target * eased);
+				el.textContent = `${current}${suffix}`;
+				if (progress < 1) requestAnimationFrame(step);
+			};
+			requestAnimationFrame(step);
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						animate(entry.target as HTMLElement);
+						observer.unobserve(entry.target);
+					}
+				});
+			},
+			{ threshold: 0.3 }
+		);
+
+		counters.forEach((c) => observer.observe(c));
+	}
+
+	initCounters();
+	document.addEventListener('astro:page-load', initCounters);
+</script>

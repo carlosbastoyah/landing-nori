@@ -1,0 +1,73 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import { whyChooseUs } from '../../data/content';
+
+const iconMap = [
+	'/nori/template/icons/adons.svg',
+	'/nori/template/icons/interface.svg',
+	'/nori/template/icons/fast-easy.svg',
+];
+
+const accentClasses = ['bg-ink-deep text-white', 'bg-mint-500 text-ink', 'bg-ocean-700 text-white'];
+---
+
+<section id="seguridad" class="relative overflow-hidden">
+	<div class="cs-container">
+		<div class="cs-card-style-1 cs-card-type-2">
+			<div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-y-12">
+				<div>
+					<div class="cs-card-thumb !pl-0">
+						<img
+							src="/nori/template/about-img-3.png"
+							alt="Especialista de laboratorio usando Nori"
+							class="w-full"
+							width="1024"
+							height="1024"
+							loading="lazy"
+						/>
+						<img
+							src="/nori/template/vector-2.svg"
+							alt=""
+							class="pointer-events-none absolute top-1/2 right-0 w-full -translate-y-1/2"
+							aria-hidden="true"
+						/>
+					</div>
+				</div>
+				<div>
+					<div class="cs-card-content !pl-0 max-w-[600px]">
+						<div class="mb-7">
+							<SectionEyebrow label="Por qué elegir Nori" />
+							<h2 class="cs-section-title mt-5">La plataforma correcta para laboratorios que buscan control</h2>
+						</div>
+						<p class="mb-6 leading-relaxed">
+							Controles de acceso por rol, trazabilidad de cambios y respaldo seguro de información sensible para
+							mantener calidad operativa y cumplimiento.
+						</p>
+						<div class="space-y-6">
+							{
+								whyChooseUs.map((item, index) => (
+									<div class="cs-iconbox">
+										<span class={`cs-iconbox-icon ${accentClasses[index]}`}>
+											<img src={iconMap[index]} alt="" class="h-7 w-7" width="28" height="28" />
+										</span>
+										<div>
+											<h3 class="mb-1 text-xl font-semibold text-ink">{item.title}</h3>
+											<p class="mb-0 text-sm">{item.description}</p>
+										</div>
+									</div>
+								))
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<img
+			src="/nori/template/vector-3.svg"
+			alt=""
+			class="pointer-events-none absolute right-8 bottom-8 hidden w-28 opacity-40 lg:block"
+			aria-hidden="true"
+		/>
+	</div>
+	<div class="cs-spacer-46"></div>
+</section>

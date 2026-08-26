@@ -1,0 +1,40 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHeading from '../components/layout/PageHeading.astro';
+import PricingCard from '../components/ui/PricingCard.astro';
+import SectionEyebrow from '../components/ui/SectionEyebrow.astro';
+import { pricingPlans } from '../data/content';
+---
+
+<MarketingLayout
+	title="Precios | Nori"
+	description="Conoce los planes de Nori para laboratorios clínicos y de patología. Desde implementación básica hasta soluciones empresariales."
+>
+	<PageHeading title="Nuestros precios" breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'Precios' }]} />
+
+	<section class="cs-section-gap">
+		<div class="cs-container">
+			<div class="mx-auto max-w-2xl text-center">
+				<SectionEyebrow label="Planes flexibles" class="justify-center" />
+				<p class="mt-4 text-ash-700">
+					Todos los planes incluyen demo personalizada. Contáctanos para recibir una propuesta adaptada al volumen
+					y necesidades de tu laboratorio.
+				</p>
+			</div>
+			<div class="mt-14 grid gap-8 lg:grid-cols-3 lg:items-end">
+				{
+					pricingPlans.map((plan) => (
+						<PricingCard
+							name={plan.name}
+							description={plan.description}
+							priceLabel={plan.priceLabel}
+							features={plan.features}
+							cta={plan.cta}
+							featured={plan.featured}
+						/>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</MarketingLayout>

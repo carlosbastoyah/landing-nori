@@ -1,0 +1,49 @@
+---
+import SectionEyebrow from '../ui/SectionEyebrow.astro';
+import { blogPosts } from '../../data/content';
+---
+
+<section>
+	<div class="cs-spacer-120"></div>
+	<div class="cs-container">
+		<div class="mx-auto mb-10 max-w-2xl text-center">
+			<SectionEyebrow label="Blog y artículos" class="justify-center" />
+			<h2 class="cs-section-title mt-5">Lee las últimas novedades</h2>
+		</div>
+		<div class="grid gap-[30px] md:grid-cols-2 lg:grid-cols-3">
+			{
+				blogPosts.map((post) => (
+					<article class="cs-blog-card">
+						<a href={post.href} class="cs-blog-thumb relative mb-4" aria-label={post.title}>
+							<img src={post.image} alt="" width="640" height="400" loading="lazy" />
+							<span class="cs-blog-category">{post.category}</span>
+						</a>
+						<div>
+							<div class="mb-3 flex flex-wrap gap-3.5 text-sm">
+								<span>{post.author}</span>
+								<span>{post.date}</span>
+							</div>
+							<h3 class="mb-3 text-2xl font-semibold text-ink">
+								<a href={post.href} class="text-ink no-underline hover:text-ink-deep">
+									{post.title}
+								</a>
+							</h3>
+							<a href={post.href} class="inline-flex items-center gap-2.5 text-sm font-semibold text-ink no-underline">
+								<span>Leer más</span>
+								<svg width="14" height="12" viewBox="0 0 14 12" fill="none" aria-hidden="true">
+									<path
+										d="M1 6H13M13 6L8 1M13 6L8 11"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</a>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</div>
+	<div class="cs-spacer-120"></div>
+</section>

@@ -1,0 +1,119 @@
+---
+interface Props {
+	items: { question: string; answer: string }[];
+	allowMultiple?: boolean;
+	class?: string;
+	variant?: 'default' | 'template';
+}
+
+const { items, allowMultiple = false, class: className = '', variant = 'default' } = Astro.props;
+const wrapperClass = variant === 'template' ? 'cs-accordion-template' : '';
+---
+
+<div
+	class={`space-y-3 ${wrapperClass} ${className}`}
+	data-accordion
+	data-allow-multiple={allowMultiple ? 'true' : 'false'}
+>
+	{
+		items.map((item, index) => (
+			<div class="cs-accordion-item relative" data-accordion-item>
+				<button
+					type="button"
+					class={`flex w-full items-center justify-between gap-4 text-left ${
+						variant === 'template' ? 'px-6 py-6 pr-20' : 'px-5 py-4'
+					}`}
+					data-accordion-trigger
+					aria-expanded={index === 1 ? 'true' : 'false'}
+				>
+					<span class="text-lg font-semibold text-ink">{item.question}</span>
+					{
+						variant === 'template' ? (
+							<span class="cs-accordian-toggler flex items-center justify-center" data-accordion-icon aria-hidden="true">
+								<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+									<path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+								</svg>
+							</span>
+						) : (
+							<span
+								class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-paper-2 text-ink transition-transform duration-300"
+								data-accordion-icon
+								aria-hidden="true"
+							>
+								<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+									<path d="M6 1V11M1 6H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+								</svg>
+							</span>
+						)
+					}
+				</button>
+				<div
+					class="grid transition-[grid-template-rows] duration-300 ease-out"
+					data-accordion-panel
+					style={index === 1 ? '' : 'grid-template-rows: 0fr;'}
+				>
+					<div class="overflow-hidden">
+						<p class="px-5 pb-4 leading-relaxed text-ash-700">{item.answer}</p>
+					</div>
+				</div>
+			</div>
+		))
+	}
+</div>
+
+<script>
+	function initAccordions() {
+		document.querySelectorAll('[data-accordion]').forEach((root) => {
+			if (root.hasAttribute('data-initialized')) return;
+			root.setAttribute('data-initialized', 'true');
+			const allowMultiple = root.getAttribute('data-allow-multiple') === 'true';
+
+			root.querySelectorAll('[data-accordion-trigger]').forEach((trigger) => {
+				trigger.addEventListener('click', () => {
+					const item = trigger.closest('[data-accordion-item]');
+					const panel = item?.querySelector('[data-accordion-panel]') as HTMLElement | null;
+					const icon = item?.querySelector('[data-accordion-icon]') as HTMLElement | null;
+					const isOpen = item?.classList.contains('is-open');
+
+					if (!allowMultiple && !isOpen) {
+						root.querySelectorAll('[data-accordion-item]').forEach((other) => {
+							other.classList.remove('is-open');
+							const otherPanel = other.querySelector('[data-accordion-panel]') as HTMLElement;
+							const otherTrigger = other.querySelector('[data-accordion-trigger]') as HTMLElement;
+							const otherIcon = other.querySelector('[data-accordion-icon]') as HTMLElement;
+							if (otherPanel) otherPanel.style.gridTemplateRows = '0fr';
+							if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+							if (otherIcon) otherIcon.style.transform = '';
+						});
+					}
+
+					if (isOpen) {
+						item?.classList.remove('is-open');
+						if (panel) panel.style.gridTemplateRows = '0fr';
+						trigger.setAttribute('aria-expanded', 'false');
+						if (icon) icon.style.transform = '';
+					} else {
+						item?.classList.add('is-open');
+						if (panel) panel.style.gridTemplateRows = '1fr';
+						trigger.setAttribute('aria-expanded', 'true');
+						if (icon) icon.style.transform = 'rotate(45deg)';
+					}
+				});
+			});
+
+			const openIndex = root.querySelector('[data-accordion-item]:nth-child(2)') || root.querySelector('[data-accordion-item]');
+			if (openIndex) {
+				openIndex.classList.add('is-open');
+				const panel = openIndex.querySelector('[data-accordion-panel]') as HTMLElement;
+				const icon = openIndex.querySelector('[data-accordion-icon]') as HTMLElement;
+				const trigger = openIndex.querySelector('[data-accordion-trigger]') as HTMLElement;
+				if (panel) panel.style.gridTemplateRows = '1fr';
+				if (icon) icon.style.transform = 'rotate(45deg)';
+				if (trigger) trigger.setAttribute('aria-expanded', 'true');
+			}
+		});
+	}
+
+	initAccordions();
+	document.addEventListener('astro:page-load', initAccordions);
+</script>

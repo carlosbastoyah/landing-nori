@@ -1,0 +1,74 @@
+---
+import CheckIcon from './CheckIcon.astro';
+import { WHATSAPP_URL } from '../../data/content';
+
+interface Feature {
+	text: string;
+	included: boolean;
+}
+
+interface Props {
+	name: string;
+	description: string;
+	priceLabel: string;
+	features: Feature[];
+	cta: string;
+	featured?: boolean;
+	icon?: string;
+}
+
+const { name, description, priceLabel, features, cta, featured = false, icon } = Astro.props;
+---
+
+<article class={`cs-pricing-table ${featured ? 'is-featured' : ''}`}>
+	{
+		featured && (
+			<>
+				<div class="cs-pricing-shape" aria-hidden="true">
+					<img src="/nori/decorative/pricing-shape-1.svg" alt="" />
+				</div>
+				<span class="cs-pricing-badge">Más popular</span>
+			</>
+		)
+	}
+	<div class="cs-pricing-heading">
+		<h3 class="text-2xl font-semibold text-ink">{name}</h3>
+		{
+			icon && (
+				<span class="flex h-12 w-12 items-center justify-center">
+					<img src={icon} alt="" class="h-8 w-8" width="32" height="32" />
+				</span>
+			)
+		}
+	</div>
+	<div class="mb-5">
+		<div class="font-display text-[48px] leading-none font-semibold text-ink">{priceLabel}</div>
+		<p class="mt-2 text-sm text-ash-700">{description}</p>
+	</div>
+	<div class="cs-pricing-separator"></div>
+	<ul class="cs-pricing-features mb-8">
+		{
+			features.map((feature) => (
+				<li class={feature.included ? 'text-ink' : 'text-ash-500 line-through'}>
+					<span class="cs-feature-icon">
+						<CheckIcon />
+					</span>
+					{feature.text}
+				</li>
+			))
+		}
+	</ul>
+	<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="cs-pricing-cta">
+		<span>{cta}</span>
+		<span class="cs-btn-icon" aria-hidden="true">
+			<svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+				<path
+					d="M1 6H13M13 6L8 1M13 6L8 11"
+					stroke="currentColor"
+					stroke-width="1.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"></path>
+			</svg>
+		</span>
+	</a>
+</article>

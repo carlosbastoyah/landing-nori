@@ -1,0 +1,16 @@
+---
+interface Props {
+	value: number;
+	suffix?: string;
+	label: string;
+}
+
+const { value, suffix = '', label } = Astro.props;
+---
+
+<div class="text-center">
+	<div class="cs-counter-number mb-2.5 flex items-baseline justify-center gap-0" data-counter data-count-to={value} data-suffix={suffix}>
+		0{suffix}
+	</div>
+	<p class="mb-0 text-lg text-white">{label}</p>
+</div>
