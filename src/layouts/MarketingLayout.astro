@@ -8,16 +8,26 @@ interface Props {
 	title?: string;
 	description?: string;
 	image?: string;
+	canonical?: string;
+	noindex?: boolean;
 	breadcrumb?: { label: string; href?: string }[];
 	schema?: Record<string, unknown>[];
 }
 
-const { title, description, image, breadcrumb, schema } = Astro.props;
+const { title, description, image, canonical, noindex, breadcrumb, schema } = Astro.props;
 ---
 
-<Layout title={title} description={description} image={image} breadcrumb={breadcrumb} schema={schema}>
+<Layout
+	title={title}
+	description={description}
+	image={image}
+	canonical={canonical}
+	noindex={noindex}
+	breadcrumb={breadcrumb}
+	schema={schema}
+>
 	<SiteHeader />
-	<main>
+	<main id="contenido" tabindex="-1">
 		<slot />
 	</main>
 	<SiteFooter />
@@ -61,5 +71,4 @@ const { title, description, image, breadcrumb, schema } = Astro.props;
 	}
 
 	initCounters();
-	document.addEventListener('astro:page-load', initCounters);
 </script>

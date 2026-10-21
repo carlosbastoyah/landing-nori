@@ -1,8 +1,9 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import PageHeading from '../components/layout/PageHeading.astro';
-import Button from '../components/ui/Button.astro';
-import { WHATSAPP_URL, PHONE_URL, COMPANY } from '../data/content';
+import { Image } from 'astro:assets';
+import screenshotDashboard from '../assets/mockups/screenshot-dashboard.png';
+import { WHATSAPP_URL, WHATSAPP_PHONE, PHONE_URL, COMPANY } from '../data/content';
 
 const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 ---
@@ -20,13 +21,14 @@ const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 				<div class="cs-card p-8">
 					<h2 class="text-2xl font-semibold text-ink">Envíanos un mensaje</h2>
 					<p class="mt-3 text-ash-700">Cuéntanos sobre tu laboratorio y te responderemos en menos de 24 horas.</p>
-					<form class="mt-8 space-y-5" action={WHATSAPP_URL} method="get" target="_blank">
+					<form class="mt-8 space-y-5" id="contact-form" data-phone={WHATSAPP_PHONE}>
 						<div>
 							<label for="name" class="mb-2 block text-sm font-medium text-ink">Nombre</label>
 							<input
 								type="text"
 								id="name"
 								name="name"
+								autocomplete="name"
 								required
 								class="w-full rounded-xl border border-line bg-paper px-4 py-3 text-ink outline-none transition focus:border-mint-500 focus:ring-2 focus:ring-mint-300/40"
 								placeholder="Tu nombre"
@@ -38,6 +40,7 @@ const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 								type="email"
 								id="email"
 								name="email"
+								autocomplete="email"
 								required
 								class="w-full rounded-xl border border-line bg-paper px-4 py-3 text-ink outline-none transition focus:border-mint-500 focus:ring-2 focus:ring-mint-300/40"
 								placeholder="tu@laboratorio.com"
@@ -47,15 +50,29 @@ const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 							<label for="message" class="mb-2 block text-sm font-medium text-ink">Mensaje</label>
 							<textarea
 								id="message"
-								name="text"
+								name="message"
 								rows="4"
 								required
 								class="w-full resize-none rounded-xl border border-line bg-paper px-4 py-3 text-ink outline-none transition focus:border-mint-500 focus:ring-2 focus:ring-mint-300/40"
 								placeholder="Cuéntanos sobre tu laboratorio y qué necesitas..."></textarea>
 						</div>
-						<Button href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" variant="dark">
-							Enviar por WhatsApp
-						</Button>
+						<button type="submit" class="cs-btn-dark">
+							<span>Enviar por WhatsApp</span>
+							<span class="cs-btn-icon" aria-hidden="true">
+								<svg width="14" height="12" viewBox="0 0 14 12" fill="none">
+									<path
+										d="M1 6H13M13 6L8 1M13 6L8 11"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</span>
+						</button>
+						<p class="text-xs text-ash-700">
+							Se abrirá WhatsApp con tu mensaje listo para enviar. Al enviarlo aceptas nuestro
+							<a href="/aviso-de-privacidad/" class="underline hover:text-ink">aviso de privacidad</a>.
+						</p>
 					</form>
 				</div>
 
@@ -141,17 +158,42 @@ const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 					</div>
 
 					<div class="mt-10 overflow-hidden rounded-2xl">
-						<img
-							src="/nori/screenshot-dashboard.png"
-							alt="Panel de Nori"
-							class="w-full object-cover"
-							width="1600"
-							height="1000"
-							loading="lazy"
-						/>
+						<Image
+						src={screenshotDashboard}
+						alt="Panel de Nori con el resumen de órdenes del laboratorio"
+						class="w-full object-cover"
+						widths={[480, 800, 1200]}
+						sizes="(min-width: 1024px) 600px, 100vw"
+						format="webp"
+					/>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 </MarketingLayout>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+
+	if (form) {
+		// The footer CTA links here with ?email=..., so carry it over
+		const email = new URLSearchParams(window.location.search).get('email');
+		const emailInput = form.elements.namedItem('email') as HTMLInputElement | null;
+		if (email && emailInput && !emailInput.value) emailInput.value = email;
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const text = [
+				'Hola, quiero información sobre Nori.',
+				`Nombre: ${data.get('name')}`,
+				`Correo: ${data.get('email')}`,
+				'',
+				String(data.get('message') ?? ''),
+			].join('\n');
+			const params = new URLSearchParams({ phone: form.dataset.phone ?? '', text });
+			window.open(`https://api.whatsapp.com/send/?${params}`, '_blank', 'noopener');
+		});
+	}
+</script>

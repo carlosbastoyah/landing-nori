@@ -1,16 +1,11 @@
 ---
 import { WHATSAPP_URL } from '../../data/content';
+import { mainNav, isCurrent } from '../../data/navigation';
 
-const navLinks = [
-	{ href: '/#producto', label: 'Producto' },
-	{ href: '/software-laboratorio-clinico/', label: 'Laboratorio clínico' },
-	{ href: '/software-laboratorio-patologia/', label: 'Patología' },
-	{ href: '/precios/', label: 'Precios' },
-	{ href: '/preguntas-frecuentes/', label: 'FAQ' },
-	{ href: '/descargas/', label: 'Descargas' },
-	{ href: '/contacto/', label: 'Contacto' },
-];
+const navLinks = mainNav.map((link) => ({ ...link, current: isCurrent(link.href, Astro.url.pathname) }));
 ---
+
+<a href="#contenido" class="cs-skip-link">Saltar al contenido</a>
 
 <header id="site-header" class="cs-site-header">
 	<div class="cs-main-header">
@@ -39,7 +34,9 @@ const navLinks = [
 							{
 								navLinks.map((link) => (
 									<li>
-										<a href={link.href}>{link.label}</a>
+										<a href={link.href} aria-current={link.current ? 'page' : undefined}>
+											{link.label}
+										</a>
 									</li>
 								))
 							}
@@ -82,11 +79,13 @@ const navLinks = [
 		</div>
 	</div>
 
-	<div id="mobile-menu" class="cs-mobile-nav" aria-hidden="true">
+	<div id="mobile-menu" class="cs-mobile-nav" inert>
 		<nav aria-label="Móvil">
 			{
 				navLinks.map((link) => (
-					<a href={link.href}>{link.label}</a>
+					<a href={link.href} aria-current={link.current ? 'page' : undefined}>
+						{link.label}
+					</a>
 				))
 			}
 		</nav>
@@ -115,71 +114,75 @@ const navLinks = [
 	const header = document.getElementById('site-header');
 	const menuBtn = document.getElementById('mobile-menu-btn');
 	const mobileMenu = document.getElementById('mobile-menu');
+	const desktopQuery = window.matchMedia('(min-width: 1200px)');
 
 	function isMobileOpen() {
 		return Boolean(mobileMenu?.classList.contains('is-open'));
 	}
 
 	if (header) {
-		let lastScrollTop = 0;
-		const onScroll = () => {
-			if (isMobileOpen()) {
-				header.classList.remove('cs-gescout-sticky');
-				header.classList.add('cs-gescout-show');
-				return;
-			}
+		let lastScrollTop = window.scrollY;
+		let ticking = false;
+
+		const update = () => {
+			ticking = false;
+			if (isMobileOpen()) return;
 
 			const windowTop = window.scrollY;
-			const headerHeight = header.offsetHeight + 20;
+			const isSticky = windowTop >= header.offsetHeight + 20;
 
-			if (windowTop >= headerHeight) {
-				header.classList.add('cs-gescout-sticky');
-			} else {
-				header.classList.remove('cs-gescout-sticky');
-				header.classList.remove('cs-gescout-show');
-			}
-
-			if (header.classList.contains('cs-gescout-sticky')) {
-				if (windowTop < lastScrollTop) {
-					header.classList.add('cs-gescout-show');
-				} else {
-					header.classList.remove('cs-gescout-show');
-				}
-			}
-
+			header.classList.toggle('cs-gescout-sticky', isSticky);
+			header.classList.toggle('cs-gescout-show', isSticky && windowTop < lastScrollTop);
 			lastScrollTop = windowTop;
 		};
 
-		onScroll();
-		window.addEventListener('scroll', onScroll, { passive: true });
+		update();
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(update);
+			},
+			{ passive: true }
+		);
+
+		// Reveal the header when keyboard focus lands inside it while it is hidden
+		header.addEventListener('focusin', () => {
+			if (header.classList.contains('cs-gescout-sticky')) header.classList.add('cs-gescout-show');
+		});
 	}
 
 	if (menuBtn && mobileMenu) {
-		const closeMenu = () => {
-			mobileMenu.classList.remove('is-open');
-			menuBtn.classList.remove('is-active');
-			document.body.style.overflow = '';
-			menuBtn.setAttribute('aria-expanded', 'false');
-			mobileMenu.setAttribute('aria-hidden', 'true');
-		};
-
-		menuBtn.addEventListener('click', () => {
-			const isOpen = mobileMenu.classList.contains('is-open');
-			if (isOpen) {
-				closeMenu();
-			} else {
-				mobileMenu.classList.add('is-open');
-				menuBtn.classList.add('is-active');
-				document.body.style.overflow = 'hidden';
-				menuBtn.setAttribute('aria-expanded', 'true');
-				mobileMenu.setAttribute('aria-hidden', 'false');
+		const setOpen = (open: boolean) => {
+			mobileMenu.classList.toggle('is-open', open);
+			mobileMenu.inert = !open;
+			menuBtn.classList.toggle('is-active', open);
+			menuBtn.setAttribute('aria-expanded', String(open));
+			menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+			document.documentElement.style.overflow = open ? 'hidden' : '';
+			if (open) {
 				header?.classList.remove('cs-gescout-sticky');
 				header?.classList.add('cs-gescout-show');
+				mobileMenu.querySelector('a')?.focus();
 			}
-		});
+		};
+
+		menuBtn.addEventListener('click', () => setOpen(!isMobileOpen()));
 
 		mobileMenu.querySelectorAll('a').forEach((link) => {
-			link.addEventListener('click', closeMenu);
+			link.addEventListener('click', () => setOpen(false));
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key !== 'Escape' || !isMobileOpen()) return;
+			setOpen(false);
+			menuBtn.focus();
+		});
+
+		// Rotating a tablet or resizing past the breakpoint must not leave the page scroll-locked
+		desktopQuery.addEventListener('change', (event) => {
+			if (event.matches && isMobileOpen()) setOpen(false);
 		});
 	}
 </script>

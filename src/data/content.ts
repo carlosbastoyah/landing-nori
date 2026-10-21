@@ -1,7 +1,23 @@
-export const WHATSAPP_URL =
-	'https://api.whatsapp.com/send/?phone=529994533797&text=Hola%2C+quiero+conocer+m%C3%A1s+sobre+la+plataforma+para+laboratorios+cl%C3%ADnicos+y+de+patolog%C3%ADa.&type=phone_number&app_absent=0';
+export const WHATSAPP_PHONE = '529994533797';
+
+/** WhatsApp chat link with a prefilled message. */
+export function whatsappUrl(text: string): string {
+	const params = new URLSearchParams({ phone: WHATSAPP_PHONE, text, type: 'phone_number', app_absent: '0' });
+	return `https://api.whatsapp.com/send/?${params}`;
+}
+
+export const WHATSAPP_URL = whatsappUrl(
+	'Hola, quiero conocer más sobre la plataforma para laboratorios clínicos y de patología.'
+);
 
 export const PHONE_URL = 'tel:+529994533797';
+
+/** Official profiles; leave a value empty to hide its icon in the footer. */
+export const SOCIAL_URLS = {
+	facebook: 'https://www.facebook.com/profile.php?id=61592600853555',
+	linkedin: '',
+	instagram: 'https://www.instagram.com/ws_nori/',
+};
 
 export const WEB_APP_URL = 'https://app.wsnori.com/';
 

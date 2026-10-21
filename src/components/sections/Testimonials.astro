@@ -14,7 +14,7 @@ import { testimonials } from '../../data/content';
 		<div class="testimonial_slider_content relative">
 			<div class="cs-testimonial-slider-wrap">
 				<div class="cs-testimonial-box-bg" aria-hidden="true">
-					<img src="/nori/template/testimonial-shape-1.svg" alt="" />
+					<img loading="lazy" decoding="async" src="/nori/template/testimonial-shape-1.svg" alt="" />
 				</div>
 
 				<div class="cs-testimonial-nav">
@@ -27,7 +27,7 @@ import { testimonials } from '../../data/content';
 								aria-label={`Testimonio de ${item.name}`}
 								aria-pressed={index === 0 ? 'true' : 'false'}
 							>
-								<img src={item.avatar} alt="" width="100" height="100" />
+								<img loading="lazy" decoding="async" src={item.avatar} alt="" width="100" height="100" />
 							</button>
 						))
 					}
@@ -57,13 +57,13 @@ import { testimonials } from '../../data/content';
 				</div>
 			</div>
 
-			<img
+			<img loading="lazy" decoding="async"
 				src="/nori/template/trash-group.svg"
 				alt=""
 				class="pointer-events-none absolute top-20 right-[6%] hidden w-32 lg:block"
 				aria-hidden="true"
 			/>
-			<img
+			<img loading="lazy" decoding="async"
 				src="/nori/template/vector-4.svg"
 				alt=""
 				class="pointer-events-none absolute top-20 left-0 hidden w-20 lg:block"

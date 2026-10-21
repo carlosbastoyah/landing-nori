@@ -1,0 +1,68 @@
+---
+import { PUBLIC_GTM_ID } from 'astro:env/client';
+
+interface Props {
+	/** `head` loads the container; `body` is the noscript fallback, placed right after <body>. */
+	part: 'head' | 'body';
+}
+
+const { part } = Astro.props;
+
+// Only production builds report, so local development never pollutes the analytics data
+const gtmId = import.meta.env.PROD ? PUBLIC_GTM_ID : undefined;
+---
+
+{
+	gtmId && part === 'head' && (
+		<script is:inline define:vars={{ gtmId }}>
+			(function (w, d, s, l, i) {
+				w[l] = w[l] || [];
+				w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+				var f = d.getElementsByTagName(s)[0],
+					j = d.createElement(s),
+					dl = l != 'dataLayer' ? '&l=' + l : '';
+				j.async = true;
+				j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+				f.parentNode.insertBefore(j, f);
+			})(window, document, 'script', 'dataLayer', gtmId);
+
+			// Conversion events for GTM: use them as "Custom Event" triggers (generate_lead, file_download, sign_up_intent)
+			var track = function (event, params) {
+				window.dataLayer.push(Object.assign({ event: event, page_path: window.location.pathname }, params));
+			};
+
+			document.addEventListener('click', function (e) {
+				var link = e.target instanceof Element ? e.target.closest('a, [data-download]') : null;
+				if (!link) return;
+				var href = link.getAttribute('href') || '';
+
+				if (href.includes('whatsapp.com') || href.includes('wa.me')) {
+					track('generate_lead', { lead_method: 'whatsapp', link_text: link.textContent.trim() });
+				} else if (href.startsWith('tel:')) {
+					track('generate_lead', { lead_method: 'phone' });
+				} else if (link.hasAttribute('data-download')) {
+					track('file_download', { download_platform: link.getAttribute('data-download') });
+				}
+			});
+
+			document.addEventListener('submit', function (e) {
+				var form = e.target;
+				if (!(form instanceof HTMLFormElement)) return;
+				if (form.id === 'contact-form') track('generate_lead', { lead_method: 'contact_form' });
+				else if (form.closest('footer')) track('sign_up_intent', { lead_method: 'footer_email' });
+			});
+		</script>
+	)
+}
+{
+	gtmId && part === 'body' && (
+		<noscript>
+			<iframe
+				src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+				height="0"
+				width="0"
+				style="display:none;visibility:hidden"
+				title="Google Tag Manager"></iframe>
+		</noscript>
+	)
+}

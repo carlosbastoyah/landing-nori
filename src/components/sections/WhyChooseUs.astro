@@ -27,7 +27,7 @@ const accentClasses = ['bg-ink-deep text-white', 'bg-mint-500 text-ink', 'bg-oce
 							widths={[500, 750, 1000]}
 							sizes="(min-width: 1024px) 50vw, 100vw"
 						/>
-						<img
+						<img loading="lazy" decoding="async"
 							src="/nori/template/vector-2.svg"
 							alt=""
 							class="pointer-events-none absolute top-1/2 right-0 w-full -translate-y-1/2"
@@ -50,7 +50,7 @@ const accentClasses = ['bg-ink-deep text-white', 'bg-mint-500 text-ink', 'bg-oce
 								whyChooseUs.map((item, index) => (
 									<div class="cs-iconbox">
 										<span class={`cs-iconbox-icon ${accentClasses[index]}`}>
-											<img src={iconMap[index]} alt="" class="h-7 w-7" width="28" height="28" />
+											<img loading="lazy" decoding="async" src={iconMap[index]} alt="" class="h-7 w-7" width="28" height="28" />
 										</span>
 										<div>
 											<h3 class="mb-1 text-xl font-semibold text-ink">{item.title}</h3>
@@ -64,7 +64,7 @@ const accentClasses = ['bg-ink-deep text-white', 'bg-mint-500 text-ink', 'bg-oce
 				</div>
 			</div>
 		</div>
-		<img
+		<img loading="lazy" decoding="async"
 			src="/nori/template/vector-3.svg"
 			alt=""
 			class="pointer-events-none absolute right-8 bottom-8 hidden w-28 opacity-40 lg:block"

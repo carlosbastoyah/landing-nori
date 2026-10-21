@@ -26,9 +26,9 @@ const planIcons = [
 			{pricingPlans.map((plan, index) => <PricingCard plan={plan} icon={planIcons[index]} />)}
 		</div>
 		<div class="mt-10 text-center">
-			<a href="/precios/#calculadora" class="cs-btn-outline">Calcular el precio para mi laboratorio</a>
+			<a href="/precios/" class="cs-btn-outline">Comparar planes en detalle</a>
 		</div>
-		<img
+		<img loading="lazy" decoding="async"
 			src="/nori/decorative/vector-6.svg"
 			alt=""
 			class="pointer-events-none absolute right-0 bottom-20 hidden w-40 opacity-30 xl:block"

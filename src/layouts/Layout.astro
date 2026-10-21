@@ -1,6 +1,9 @@
 ---
 import '../styles/global.css';
-import { COMPANY, modules } from '../data/content';
+import { Font } from 'astro:assets';
+import { PUBLIC_GOOGLE_SITE_VERIFICATION } from 'astro:env/client';
+import Analytics from '../components/seo/Analytics.astro';
+import { COMPANY, SOCIAL_URLS, modules } from '../data/content';
 
 interface Props {
 	title?: string;
@@ -27,6 +30,13 @@ const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteOrigin).toStri
 const ogImage = image.startsWith('http') ? image : new URL(image, siteOrigin).toString();
 
 const organizationId = `${siteOrigin}/#organization`;
+const websiteId = `${siteOrigin}/#website`;
+const softwareId = `${siteOrigin}/#software`;
+
+// Pages may describe the product further (offers, OS details); fold those into the single site-wide
+// SoftwareApplication node instead of emitting a second, conflicting entity.
+const pageSoftware = schema.filter((node) => node['@type'] === 'SoftwareApplication');
+const otherSchema = schema.filter((node) => node['@type'] !== 'SoftwareApplication');
 
 const breadcrumbSchema =
 	breadcrumb.length > 1
@@ -54,7 +64,15 @@ const jsonLd = JSON.stringify({
 			taxID: COMPANY.rfc,
 			url: siteOrigin,
 			logo: `${siteOrigin}/nori/nori-logo.png`,
+			sameAs: Object.values(SOCIAL_URLS).filter(Boolean),
 			telephone: COMPANY.phone,
+			contactPoint: {
+				'@type': 'ContactPoint',
+				telephone: COMPANY.phone,
+				contactType: 'sales',
+				areaServed: 'MX',
+				availableLanguage: 'es',
+			},
 			address: {
 				'@type': 'PostalAddress',
 				streetAddress: COMPANY.address.street,
@@ -66,26 +84,43 @@ const jsonLd = JSON.stringify({
 		},
 		{
 			'@type': 'WebSite',
-			'@id': `${siteOrigin}/#website`,
+			'@id': websiteId,
 			name: COMPANY.brandName,
 			url: siteOrigin,
 			inLanguage: 'es-MX',
 			publisher: { '@id': organizationId },
 		},
+		Object.assign(
+			{
+				'@type': 'SoftwareApplication',
+				'@id': softwareId,
+				name: COMPANY.brandName,
+				applicationCategory: 'BusinessApplication',
+				applicationSubCategory: 'Sistema de información de laboratorio (LIS)',
+				description:
+					'Software LIS para laboratorios clínicos y de patología: casos, resultados, laminillas, reportes y cobro.',
+				operatingSystem: 'Web, Windows, macOS',
+				downloadUrl: `${siteOrigin}/descargas/`,
+				featureList: modules.filter((module) => !module.comingSoon).map((module) => module.title),
+				url: siteOrigin,
+				image: ogImage,
+				provider: { '@id': organizationId },
+			},
+			...pageSoftware.map(({ '@type': _type, ...rest }) => rest)
+		),
 		{
-			'@type': 'SoftwareApplication',
-			name: COMPANY.brandName,
-			applicationCategory: 'HealthApplication',
+			'@type': 'WebPage',
+			'@id': `${canonicalUrl}#webpage`,
+			url: canonicalUrl,
+			name: title,
 			description,
-			operatingSystem: 'Web, Windows, macOS',
-			downloadUrl: `${siteOrigin}/descargas/`,
-			featureList: modules.filter((module) => !module.comingSoon).map((module) => module.title),
-			url: siteOrigin,
-			image: ogImage,
-			provider: { '@id': organizationId },
+			inLanguage: 'es-MX',
+			isPartOf: { '@id': websiteId },
+			about: { '@id': softwareId },
+			primaryImageOfPage: ogImage,
 		},
 		...breadcrumbSchema,
-		...schema,
+		...otherSchema,
 	],
 });
 ---
@@ -95,20 +130,23 @@ const jsonLd = JSON.stringify({
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<Analytics part="head" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
-		<link rel="canonical" href={canonicalUrl} />
+		<meta
+			name="robots"
+			content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+		/>
+		{!noindex && <link rel="canonical" href={canonicalUrl} />}
+		<meta name="theme-color" content="#082f36" />
+		{PUBLIC_GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={PUBLIC_GOOGLE_SITE_VERIFICATION} />}
+		<link rel="sitemap" href="/sitemap-index.xml" />
 
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-		<link
-			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Kodchasan:wght@400;500;600;700&display=swap"
-			rel="stylesheet"
-		/>
+		<Font cssVariable="--font-dm-sans" preload={[{ weight: '400 700', style: 'normal' }]} />
+		<Font cssVariable="--font-kodchasan" preload={[{ weight: '600', style: 'normal' }]} />
 
 		<meta property="og:locale" content="es_MX" />
 		<meta property="og:type" content="website" />
@@ -116,6 +154,8 @@ const jsonLd = JSON.stringify({
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
 		<meta property="og:image:alt" content={title} />
 		<meta property="og:site_name" content="Nori" />
 
@@ -128,6 +168,7 @@ const jsonLd = JSON.stringify({
 		<script type="application/ld+json" set:html={jsonLd}></script>
 	</head>
 	<body>
+		<Analytics part="body" />
 		<slot />
 	</body>
 </html>
