@@ -8,12 +8,14 @@ interface Props {
 	title?: string;
 	description?: string;
 	image?: string;
+	breadcrumb?: { label: string; href?: string }[];
+	schema?: Record<string, unknown>[];
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, breadcrumb, schema } = Astro.props;
 ---
 
-<Layout title={title} description={description} image={image}>
+<Layout title={title} description={description} image={image} breadcrumb={breadcrumb} schema={schema}>
 	<SiteHeader />
 	<main>
 		<slot />

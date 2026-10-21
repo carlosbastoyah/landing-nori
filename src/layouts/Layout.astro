@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { COMPANY, modules } from '../data/content';
 
 interface Props {
 	title?: string;
@@ -7,39 +8,86 @@ interface Props {
 	canonical?: string;
 	image?: string;
 	noindex?: boolean;
+	breadcrumb?: { label: string; href?: string }[];
+	schema?: Record<string, unknown>[];
 }
 
 const {
-	title = 'Nori | Software para laboratorios clinicos y de patologia',
-	description = 'Digitaliza estudios, casos y reportes clinicos y de patologia con flujos trazables, colaboracion clinica y seguridad de nivel medico.',
+	title = 'Nori | Software LIS para laboratorios clínicos y de patología',
+	description = 'Digitaliza estudios, casos y reportes clínicos y de patología con flujos trazables, colaboración clínica y seguridad de nivel médico.',
 	canonical,
-	image = '/nori/screenshot-dashboard.png',
+	image = '/og-image.jpg',
 	noindex = false,
+	breadcrumb = [],
+	schema = [],
 } = Astro.props;
 
 const siteOrigin = Astro.site ? new URL(Astro.site).origin : Astro.url.origin;
 const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteOrigin).toString();
 const ogImage = image.startsWith('http') ? image : new URL(image, siteOrigin).toString();
 
-const jsonLd = JSON.stringify([
-	{
-		'@context': 'https://schema.org',
-		'@type': 'Organization',
-		name: 'Nori',
-		url: canonicalUrl,
-		logo: `${siteOrigin}/nori/nori-lockup-horizontal-gradient.svg`,
-	},
-	{
-		'@context': 'https://schema.org',
-		'@type': 'SoftwareApplication',
-		name: 'Nori',
-		applicationCategory: 'HealthApplication',
-		description,
-		operatingSystem: 'Web',
-		url: canonicalUrl,
-		image: ogImage,
-	},
-]);
+const organizationId = `${siteOrigin}/#organization`;
+
+const breadcrumbSchema =
+	breadcrumb.length > 1
+		? [
+				{
+					'@type': 'BreadcrumbList',
+					itemListElement: breadcrumb.map((item, i) => ({
+						'@type': 'ListItem',
+						position: i + 1,
+						name: item.label,
+						item: new URL(item.href ?? Astro.url.pathname, siteOrigin).toString(),
+					})),
+				},
+			]
+		: [];
+
+const jsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Organization',
+			'@id': organizationId,
+			name: COMPANY.brandName,
+			legalName: COMPANY.legalNameFull,
+			taxID: COMPANY.rfc,
+			url: siteOrigin,
+			logo: `${siteOrigin}/nori/nori-logo.png`,
+			telephone: COMPANY.phone,
+			address: {
+				'@type': 'PostalAddress',
+				streetAddress: COMPANY.address.street,
+				addressLocality: COMPANY.address.city,
+				addressRegion: COMPANY.address.state,
+				postalCode: COMPANY.address.postalCode,
+				addressCountry: 'MX',
+			},
+		},
+		{
+			'@type': 'WebSite',
+			'@id': `${siteOrigin}/#website`,
+			name: COMPANY.brandName,
+			url: siteOrigin,
+			inLanguage: 'es-MX',
+			publisher: { '@id': organizationId },
+		},
+		{
+			'@type': 'SoftwareApplication',
+			name: COMPANY.brandName,
+			applicationCategory: 'HealthApplication',
+			description,
+			operatingSystem: 'Web, Windows, macOS',
+			downloadUrl: `${siteOrigin}/descargas/`,
+			featureList: modules.filter((module) => !module.comingSoon).map((module) => module.title),
+			url: siteOrigin,
+			image: ogImage,
+			provider: { '@id': organizationId },
+		},
+		...breadcrumbSchema,
+		...schema,
+	],
+});
 ---
 
 <!doctype html>
@@ -53,7 +101,7 @@ const jsonLd = JSON.stringify([
 		<link rel="canonical" href={canonicalUrl} />
 
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/nori/nori-logo.png" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -68,6 +116,7 @@ const jsonLd = JSON.stringify([
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:alt" content={title} />
 		<meta property="og:site_name" content="Nori" />
 
 		<meta name="twitter:card" content="summary_large_image" />

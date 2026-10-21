@@ -1,0 +1,76 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import PageHeading from '../components/layout/PageHeading.astro';
+import { COMPANY, PHONE_URL } from '../data/content';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Aviso de privacidad' }];
+---
+
+<MarketingLayout
+	title="Aviso de privacidad | Nori"
+	breadcrumb={breadcrumb}
+	description="Aviso de privacidad de Nori, producto de Wersoft Solutions. Conoce cómo tratamos tus datos personales."
+>
+	<PageHeading
+		title="Aviso de privacidad"
+		breadcrumb={breadcrumb}
+	/>
+
+	<section class="cs-section-gap">
+		<div class="cs-container">
+			<div class="cs-card mx-auto max-w-3xl p-8 lg:p-12">
+				<p class="text-sm text-ash-700">Última actualización: agosto de 2026</p>
+
+				<div class="prose prose-sm mt-8 max-w-none space-y-6 text-ash-700">
+					<section>
+						<h2 class="text-xl font-semibold text-ink">Responsable</h2>
+						<p>
+							<strong>{COMPANY.legalNameFull}</strong> (RFC {COMPANY.rfc}), con domicilio en {
+								COMPANY.formattedAddress
+							}, es responsable del tratamiento de los datos personales que nos proporcione a través de
+							<strong> {COMPANY.brandName}</strong>, nuestra plataforma de software para laboratorios clínicos y de
+							patología.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-xl font-semibold text-ink">Datos que recabamos</h2>
+						<p>
+							Podemos recabar datos de identificación y contacto, como nombre, correo electrónico, teléfono e
+							información relacionada con su laboratorio, cuando nos contacta, solicita una demo o utiliza
+							nuestros servicios.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-xl font-semibold text-ink">Finalidades del tratamiento</h2>
+						<ul class="list-disc space-y-2 pl-5">
+							<li>Atender solicitudes de información, demos y soporte.</li>
+							<li>Prestar y mejorar nuestros servicios.</li>
+							<li>Cumplir obligaciones legales aplicables.</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2 class="text-xl font-semibold text-ink">Derechos ARCO</h2>
+						<p>
+							Usted puede ejercer sus derechos de acceso, rectificación, cancelación u oposición, así como
+							revocar su consentimiento, enviando una solicitud a nuestro teléfono{' '}
+							<a href={PHONE_URL} class="text-ocean-700 hover:underline">{COMPANY.phone}</a> o a través de la
+							página de <a href="/contacto/" class="text-ocean-700 hover:underline">contacto</a>.
+						</p>
+					</section>
+
+					<section>
+						<h2 class="text-xl font-semibold text-ink">Contacto</h2>
+						<p>
+							Para cualquier duda sobre este aviso, puede contactarnos en{' '}
+							<a href={PHONE_URL} class="text-ocean-700 hover:underline">{COMPANY.phone}</a> o visitar{' '}
+							<a href="/contacto/" class="text-ocean-700 hover:underline">/contacto</a>.
+						</p>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+</MarketingLayout>

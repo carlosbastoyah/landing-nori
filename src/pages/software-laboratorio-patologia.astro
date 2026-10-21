@@ -1,0 +1,130 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import SolutionPage from '../components/sections/SolutionPage.astro';
+import desktopLaminillas from '../assets/mockups/desktop-laminillas.png';
+import desktopPlantilla from '../assets/mockups/desktop-plantilla-reporte.png';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Software para laboratorio de patología' }];
+
+const features = [
+	{
+		title: 'Casos de anatomía patológica',
+		description:
+			'Registra biopsias, citologías y piezas quirúrgicas con expediente, tipo de caso, médico solicitante y sucursal. Marca urgencias e imprime las etiquetas de cada muestra.',
+	},
+	{
+		title: 'Visor de laminillas',
+		description:
+			'Escanea o sube laminillas, navega con zoom, marca hallazgos por región y adjunta las figuras directamente al informe.',
+	},
+	{
+		title: 'Editor de diagnóstico',
+		description:
+			'Captura descripción macroscópica y diagnóstico con revisión ortográfica, fotos del caso y vista previa del informe en tiempo real.',
+	},
+	{
+		title: 'Plantillas de informe',
+		description:
+			'Diseña tus formatos de reporte con logo, datos de la sucursal y variables del paciente y del médico. Versiones con o sin fotografía.',
+	},
+	{
+		title: 'CRM de médicos y clientes',
+		description:
+			'Administra a los médicos que te refieren casos, tus pacientes y clientes, sus convenios y el seguimiento de cada relación.',
+	},
+	{
+		title: 'Cobro y facturación',
+		description:
+			'Controla qué casos están pagados o por cobrar, con precios por estudio. Facturación integrada próximamente.',
+	},
+];
+
+const steps = [
+	{
+		title: 'Recepción',
+		description: 'Registra al paciente, el médico solicitante y los estudios. Imprime las etiquetas de la muestra.',
+	},
+	{
+		title: 'Procesamiento',
+		description: 'Sigue el caso de recibido a en proceso, con laminillas escaneadas y hallazgos anotados.',
+	},
+	{
+		title: 'Diagnóstico',
+		description: 'Redacta el diagnóstico sobre tu plantilla y revisa el informe antes de completarlo.',
+	},
+	{
+		title: 'Entrega',
+		description: 'Exporta el informe en PDF o Word y registra la entrega y el pago del caso.',
+	},
+];
+
+const faqs = [
+	{
+		question: '¿Nori sirve para citología, biopsias y BAAF?',
+		answer:
+			'Sí. Puedes configurar tu catálogo con estudios de citología exfoliativa (Papanicolaou convencional y en base líquida), citología diversa como BAAF de tiroides, glándula mamaria o ganglio, biopsias e histopatología, cada uno con su categoría y precio.',
+	},
+	{
+		question: '¿Puedo usar los formatos de reporte que ya tengo?',
+		answer:
+			'Sí. El editor de plantillas te permite replicar tu formato actual con tu logo, encabezados, secciones de descripción macroscópica y diagnóstico, y variables que se llenan solas con los datos del paciente, el médico y la sucursal.',
+	},
+	{
+		question: '¿Puedo agregar imágenes de las laminillas al informe?',
+		answer:
+			'Sí. Desde el visor de laminillas marcas hallazgos y los adjuntas como figuras al informe. También puedes subir fotos generales del caso.',
+	},
+	{
+		question: '¿Funciona para laboratorios con varias sucursales?',
+		answer:
+			'Sí. Cada caso queda asociado a su sucursal, y las plantillas de informe pueden mostrar los datos de la sucursal que lo emite.',
+	},
+	{
+		question: '¿Se usa en web o hay que instalar algo?',
+		answer:
+			'Puedes usar Nori desde el navegador sin instalar nada o con la app de escritorio. Ambas comparten la misma cuenta y la misma información.',
+	},
+];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
+---
+
+<MarketingLayout
+	title="Software para laboratorio de patología | Nori"
+	description="Software para laboratorios de anatomía patológica: casos, biopsias y citologías, visor de laminillas, plantillas de informe y cobro en un solo sistema. Agenda una demo."
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
+>
+	<SolutionPage
+		eyebrow="Anatomía patológica"
+		title="Software para laboratorios de patología"
+		intro="Nori organiza cada biopsia, citología y pieza quirúrgica desde la recepción hasta la entrega del informe: laminillas, diagnóstico, plantillas y cobro en un solo sistema, en web y escritorio."
+		heroImage={{
+			src: desktopLaminillas,
+			alt: 'Visor de laminillas de Nori con anotaciones sobre una biopsia',
+		}}
+		features={features}
+		steps={steps}
+		detailImage={{
+			src: desktopPlantilla,
+			alt: 'Editor de plantillas de reporte de anatomía patológica en Nori',
+		}}
+		detailTitle="Informes de patología con tu formato, sin copiar y pegar"
+		detailText="Crea plantillas de reporte con tu logo y tus secciones. Los datos del paciente, el médico, la sucursal y el caso se llenan solos, y el patólogo solo se enfoca en el diagnóstico."
+		detailPoints={[
+			'Variables automáticas de paciente, médico y sucursal',
+			'Secciones de descripción macroscópica y diagnóstico',
+			'Figuras de laminillas adjuntas al informe',
+			'Exportación a PDF y Word',
+		]}
+		faqs={faqs}
+		related={{ href: '/software-laboratorio-clinico/', label: 'Nori para laboratorios clínicos' }}
+	/>
+</MarketingLayout>

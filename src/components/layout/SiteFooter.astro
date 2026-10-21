@@ -1,5 +1,5 @@
 ---
-import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
+import { WHATSAPP_URL, PHONE_URL, COMPANY } from '../../data/content';
 ---
 
 <footer class="cs-footer-panel text-ink" style="background-image: url('/nori/template/footer-bg-1.svg');">
@@ -9,7 +9,7 @@ import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
 				<h2 class="cs-section-title mb-5">Suscríbete a nuestro boletín</h2>
 				<p class="mb-0">Recibe novedades sobre Nori, mejores prácticas y casos de uso para laboratorios.</p>
 			</div>
-			<form class="flex max-w-[600px] flex-col items-stretch gap-4 sm:flex-row sm:items-center" action="/contacto" method="get">
+			<form class="flex max-w-[600px] flex-col items-stretch gap-4 sm:flex-row sm:items-center" action="/contacto/" method="get">
 				<div class="relative flex-1">
 					<span class="absolute top-1/2 left-6 -translate-y-1/2">
 						<img src="/nori/template/icons/mail.svg" alt="" class="h-5 w-5 opacity-60" width="20" height="20" />
@@ -38,7 +38,7 @@ import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
 			</form>
 		</div>
 
-		<div class="mt-[72px] grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+		<div class="mt-[72px] grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
 			<div>
 				<img src="/nori/logo-nori-text.svg" alt="Nori" class="mb-8 h-8 w-auto" width="168" height="52" />
 				<p class="mb-8 max-w-sm leading-relaxed">
@@ -72,26 +72,44 @@ import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
 				<ul class="space-y-2.5 text-sm">
 					<li><a href="/" class="transition hover:text-ink">Inicio</a></li>
 					<li><a href="/#producto" class="transition hover:text-ink">Producto</a></li>
-					<li><a href="/precios" class="transition hover:text-ink">Precios</a></li>
-					<li><a href="/contacto" class="transition hover:text-ink">Contacto</a></li>
+					<li><a href="/precios/" class="transition hover:text-ink">Precios</a></li>
+					<li><a href="/descargas/" class="transition hover:text-ink">Descargas</a></li>
+					<li><a href="/contacto/" class="transition hover:text-ink">Contacto</a></li>
+				</ul>
+			</div>
+			<div>
+				<h3 class="cs-footer-widget-title mb-7">Soluciones</h3>
+				<ul class="space-y-2.5 text-sm">
+					<li>
+						<a href="/software-laboratorio-clinico/" class="transition hover:text-ink">Laboratorio clínico (LIS)</a>
+					</li>
+					<li>
+						<a href="/software-laboratorio-patologia/" class="transition hover:text-ink">Laboratorio de patología</a>
+					</li>
 				</ul>
 			</div>
 			<div>
 				<h3 class="cs-footer-widget-title mb-7">Ayuda y soporte</h3>
 				<ul class="space-y-2.5 text-sm">
-					<li><a href="/preguntas-frecuentes" class="transition hover:text-ink">Preguntas frecuentes</a></li>
+					<li><a href="/preguntas-frecuentes/" class="transition hover:text-ink">Preguntas frecuentes</a></li>
+					<li><a href="/aviso-de-privacidad/" class="transition hover:text-ink">Aviso de privacidad</a></li>
 					<li>
 						<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink"
 							>WhatsApp</a
 						>
 					</li>
-					<li><a href={PHONE_URL} class="transition hover:text-ink">+52 999 453 3797</a></li>
+					<li><a href={PHONE_URL} class="transition hover:text-ink">{COMPANY.phone}</a></li>
 				</ul>
 			</div>
 			<div>
 				<h3 class="cs-footer-widget-title mb-7">Comienza hoy</h3>
 				<div class="flex flex-col gap-3">
-					<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="cs-btn-template justify-center">
+					<a
+						href={WHATSAPP_URL}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="cs-btn-template justify-center whitespace-nowrap"
+					>
 						<span>Agendar demo</span>
 						<span class="cs-btn-icon" aria-hidden="true">
 							<svg width="14" height="12" viewBox="0 0 14 12" fill="none">
@@ -109,8 +127,14 @@ import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
 		</div>
 	</div>
 	<div class="py-[22px]">
-		<div class="cs-container text-center text-sm">
-			© {new Date().getFullYear()} Nori. Todos los derechos reservados.
+		<div class="cs-container space-y-2 text-center text-sm">
+			<p>
+				{COMPANY.brandName} es un producto de <strong>{COMPANY.legalNameFull}</strong> (RFC {COMPANY.rfc}).
+			</p>
+			<p class="text-ash-700">
+				{COMPANY.formattedAddress} · <a href={PHONE_URL} class="hover:text-ink">{COMPANY.phone}</a>
+			</p>
+			<p>© {new Date().getFullYear()} {COMPANY.legalName}. Todos los derechos reservados.</p>
 		</div>
 	</div>
 </footer>

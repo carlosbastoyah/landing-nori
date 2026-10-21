@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { WHATSAPP_URL } from '../../data/content';
+import heroPhones from '../../assets/mockups/phones-login-dashboard.png';
 ---
 
 <section class="cs-hero-style-1">
@@ -19,7 +21,7 @@ import { WHATSAPP_URL } from '../../data/content';
 										fill="currentColor"></path>
 								</svg>
 							</span>
-							<span>La mejor solución en un solo lugar</span>
+							<span>Software para laboratorios clínicos y de patología</span>
 							<span class="text-mint-300">
 								<svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
 									<path
@@ -72,11 +74,14 @@ import { WHATSAPP_URL } from '../../data/content';
 				</div>
 				<div class="cs-hero-thumb-col order-1 lg:order-2 lg:col-span-5">
 					<div class="cs-hero-thumb">
-						<img
-							src="/nori/mockops/phones-login-dashboard.png"
+						<Image
+							src={heroPhones}
 							alt="App de Nori: inicio de sesión y panel de órdenes del laboratorio"
-							width="1600"
-							height="1200"
+							width={1200}
+							widths={[480, 800, 1200]}
+							sizes="(min-width: 1400px) 38vw, (min-width: 1024px) 42vw, 100vw"
+							format="webp"
+							loading="eager"
 							fetchpriority="high"
 						/>
 					</div>

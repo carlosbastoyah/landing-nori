@@ -4,13 +4,16 @@ import PageHeading from '../components/layout/PageHeading.astro';
 import PricingCard from '../components/ui/PricingCard.astro';
 import SectionEyebrow from '../components/ui/SectionEyebrow.astro';
 import { pricingPlans } from '../data/content';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Precios' }];
 ---
 
 <MarketingLayout
-	title="Precios | Nori"
+	title="Precios y planes | Nori, software para laboratorios"
+	breadcrumb={breadcrumb}
 	description="Conoce los planes de Nori para laboratorios clínicos y de patología. Desde implementación básica hasta soluciones empresariales."
 >
-	<PageHeading title="Nuestros precios" breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'Precios' }]} />
+	<PageHeading title="Nuestros precios" breadcrumb={breadcrumb} />
 
 	<section class="cs-section-gap">
 		<div class="cs-container">

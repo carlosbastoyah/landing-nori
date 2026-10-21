@@ -1,41 +1,30 @@
 ---
-const brands = [
-	'/nori/template/brand-1.svg',
-	'/nori/template/brand-2.svg',
-	'/nori/template/brand-3.svg',
-	'/nori/template/brand-4.svg',
-	'/nori/template/brand-5.svg',
-];
+import { Image } from 'astro:assets';
+import capayLogo from '../../assets/clients/capay-logo.jpg';
+
+const clients = [{ name: 'CAPAY, Centro de Análisis Patológicos de Yucatán', logo: capayLogo }];
 ---
 
 <section>
 	<div class="cs-spacer-120"></div>
 	<div class="cs-container">
-		<h3 class="mb-6 text-center text-xl font-medium capitalize text-ink">
-			Millones de clientes confían en nosotros
-		</h3>
-		<div class="cs-brands-slider-wrap">
-			<div class="cs-brands-slider-in">
-				<div class="cs-brands-list">
-					{
-						brands.map((src) => (
-							<div class="flex h-14 w-32 items-center justify-center">
-								<img src={src} alt="" class="max-h-10 w-auto object-contain" loading="lazy" />
-							</div>
-						))
-					}
-				</div>
-				<div class="cs-brands-list">
-					{
-						brands.map((src) => (
-							<div class="flex h-14 w-32 items-center justify-center">
-								<img src={src} alt="" class="max-h-10 w-auto object-contain" loading="lazy" />
-							</div>
-						))
-					}
-				</div>
-			</div>
-		</div>
+		<h3 class="mb-6 text-center text-xl font-medium text-ink">Clientes que confían en nosotros</h3>
+		<ul class="flex flex-wrap items-center justify-center gap-10">
+			{
+				clients.map((client) => (
+					<li>
+						<Image
+							src={client.logo}
+							alt={`Logo de ${client.name}`}
+							class="h-20 w-auto object-contain"
+							height={80}
+							densities={[1, 2]}
+							loading="lazy"
+						/>
+					</li>
+				))
+			}
+		</ul>
 	</div>
 	<div class="cs-spacer-120"></div>
 </section>

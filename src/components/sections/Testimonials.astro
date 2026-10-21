@@ -25,6 +25,7 @@ import { testimonials } from '../../data/content';
 								class={`cs-testimonial-nav-btn ${index === 0 ? 'is-active' : ''}`}
 								data-testimonial-nav={index}
 								aria-label={`Testimonio de ${item.name}`}
+								aria-pressed={index === 0 ? 'true' : 'false'}
 							>
 								<img src={item.avatar} alt="" width="100" height="100" />
 							</button>
@@ -32,10 +33,14 @@ import { testimonials } from '../../data/content';
 					}
 				</div>
 
-				<div class="mt-10" id="testimonial-content">
+				<div class="cs-testimonial-panels mt-10" id="testimonial-content">
 					{
 						testimonials.map((item, index) => (
-							<div class={`${index === 0 ? '' : 'hidden'}`} data-testimonial-slide={index}>
+							<div
+								class={`cs-testimonial-panel ${index === 0 ? 'is-active' : ''}`}
+								data-testimonial-slide={index}
+								aria-hidden={index === 0 ? 'false' : 'true'}
+							>
 								<div class="cs-testimonial-box">
 									<div class="mb-7">
 										<h3 class="mb-1 text-2xl font-semibold text-ink">{item.name}</h3>
@@ -87,11 +92,15 @@ import { testimonials } from '../../data/content';
 	navButtons.forEach((btn) => {
 		btn.addEventListener('click', () => {
 			const index = btn.getAttribute('data-testimonial-nav');
-			navButtons.forEach((b) => b.classList.remove('is-active'));
-			btn.classList.add('is-active');
+			navButtons.forEach((b) => {
+				const isActive = b === btn;
+				b.classList.toggle('is-active', isActive);
+				b.setAttribute('aria-pressed', String(isActive));
+			});
 			slides.forEach((slide) => {
-				const slideIndex = slide.getAttribute('data-testimonial-slide');
-				slide.classList.toggle('hidden', slideIndex !== index);
+				const isActive = slide.getAttribute('data-testimonial-slide') === index;
+				slide.classList.toggle('is-active', isActive);
+				slide.setAttribute('aria-hidden', String(!isActive));
 			});
 		});
 	});

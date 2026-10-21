@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
+import phonesApp from '../../assets/mockups/phones-app.png';
 ---
 
 <section id="cta" class="cs-cta-section">
@@ -12,12 +14,12 @@ import { WHATSAPP_URL, PHONE_URL } from '../../data/content';
 			<div class="grid items-center gap-10 lg:grid-cols-2">
 				<div class="order-2 lg:order-1">
 					<div class="cs-cta-thumb">
-						<img
-							src="/nori/template/cta-img-1.png"
-							alt="App móvil de Nori"
-							width="1160"
-							height="1200"
-							loading="lazy"
+						<Image
+							src={phonesApp}
+							alt="App móvil de Nori: inicio de sesión, panel y órdenes"
+							width={1200}
+							widths={[600, 900, 1200]}
+							sizes="(min-width: 1024px) 50vw, 100vw"
 						/>
 					</div>
 				</div>

@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import SectionEyebrow from '../ui/SectionEyebrow.astro';
 import Accordion from '../ui/Accordion.astro';
 import { faqs } from '../../data/content';
+import laptopPlantillas from '../../assets/mockups/laptop-plantillas.png';
 ---
 
 <section class="relative overflow-hidden bg-[#ecf1f5]">
@@ -17,13 +19,13 @@ import { faqs } from '../../data/content';
 				<Accordion items={faqs.slice(0, 3)} variant="template" />
 			</div>
 			<div class="relative order-1 lg:order-2">
-				<img
-					src="/nori/template/faq-img-1.png"
-					alt="Equipo de laboratorio consultando Nori"
-					class="w-full"
-					width="960"
-					height="640"
-					loading="lazy"
+				<Image
+					src={laptopPlantillas}
+					alt="Nori en laptop: plantillas de informe"
+					class="relative z-[1] w-full"
+					width={1200}
+					widths={[600, 900, 1200]}
+					sizes="(min-width: 1024px) 50vw, 100vw"
 				/>
 				<img
 					src="/nori/decorative/vector-5.svg"

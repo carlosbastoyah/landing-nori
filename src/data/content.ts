@@ -3,6 +3,34 @@ export const WHATSAPP_URL =
 
 export const PHONE_URL = 'tel:+529994533797';
 
+export const WEB_APP_URL = 'https://app.wsnori.com/';
+
+/** Public installer download of the backend: `{target}/{arch}` answers with the latest published installer. */
+export const DESKTOP_DOWNLOADS_URL = 'https://app.wsnori.com/api/administration/desktop-downloads';
+
+export const COMPANY = {
+	brandName: 'Nori',
+	legalName: 'WERSOFT SOLUTIONS',
+	regimenCapital: 'SOCIEDAD ANONIMA PROMOTORA DE INVERSION DE CAPITAL VARIABLE',
+	legalNameFull:
+		'WERSOFT SOLUTIONS, SOCIEDAD ANONIMA PROMOTORA DE INVERSION DE CAPITAL VARIABLE',
+	legalNameShort: 'Wersoft Solutions S.A.P.I. de C.V.',
+	rfc: 'WSO260707KC6',
+	tradeName: 'WERSOFT',
+	phone: '+52 999 453 3797',
+	address: {
+		street: 'Calle 55 C 988',
+		neighborhood: 'Las Américas II',
+		city: 'Mérida',
+		state: 'Yucatán',
+		postalCode: '97302',
+		country: 'México',
+	},
+	get formattedAddress() {
+		return `${this.address.street}, Col. ${this.address.neighborhood}, ${this.address.city}, ${this.address.state}, C.P. ${this.address.postalCode}, ${this.address.country}`;
+	},
+} as const;
+
 export const painPoints = [
 	{
 		title: 'Trazabilidad fragmentada',
@@ -43,6 +71,34 @@ export const features = [
 		title: 'Reportería personalizable',
 		description: 'Paneles por rol para dirección, coordinación y operación con KPIs accionables.',
 		image: '/nori/illustrations/feature-reports.svg',
+	},
+];
+
+export const modules = [
+	{
+		title: 'Casos y estudios',
+		description: 'Recepción de órdenes, seguimiento por estado, urgencias y catálogo de estudios con precios.',
+	},
+	{
+		title: 'Laminillas',
+		description: 'Escanea o sube laminillas, revísalas con zoom, anota hallazgos y adjúntalos al informe.',
+	},
+	{
+		title: 'Resultados e informes',
+		description: 'Captura con valores de referencia, plantillas de informe propias y exportación a PDF o Word.',
+	},
+	{
+		title: 'CRM',
+		description: 'Administra médicos, pacientes y clientes del laboratorio, sus convenios y el seguimiento de cada relación.',
+	},
+	{
+		title: 'Cobro',
+		description: 'Estado de pago por caso, cuentas por cobrar y precios por forma de pago.',
+	},
+	{
+		title: 'Facturación',
+		description: 'Emite las facturas de tus estudios directamente desde Nori, sin capturar dos veces.',
+		comingSoon: true,
 	},
 ];
 

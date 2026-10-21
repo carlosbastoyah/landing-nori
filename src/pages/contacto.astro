@@ -2,14 +2,17 @@
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import PageHeading from '../components/layout/PageHeading.astro';
 import Button from '../components/ui/Button.astro';
-import { WHATSAPP_URL, PHONE_URL } from '../data/content';
+import { WHATSAPP_URL, PHONE_URL, COMPANY } from '../data/content';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Contacto' }];
 ---
 
 <MarketingLayout
-	title="Contacto | Nori"
+	title="Contacto y demo | Nori, software para laboratorios"
+	breadcrumb={breadcrumb}
 	description="Contáctanos para agendar una demo de Nori. WhatsApp, teléfono y formulario de contacto para laboratorios clínicos."
 >
-	<PageHeading title="Contáctanos" breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'Contacto' }]} />
+	<PageHeading title="Contáctanos" breadcrumb={breadcrumb} />
 
 	<section class="cs-section-gap">
 		<div class="cs-container">
@@ -72,7 +75,7 @@ import { WHATSAPP_URL, PHONE_URL } from '../data/content';
 							<div>
 								<h3 class="font-semibold text-ink">WhatsApp</h3>
 								<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="text-ocean-700 hover:underline"
-									>+52 999 453 3797</a
+									>{COMPANY.phone}</a
 								>
 							</div>
 						</div>
@@ -86,7 +89,7 @@ import { WHATSAPP_URL, PHONE_URL } from '../data/content';
 							</span>
 							<div>
 								<h3 class="font-semibold text-ink">Teléfono</h3>
-								<a href={PHONE_URL} class="text-ocean-700 hover:underline">+52 999 453 3797</a>
+								<a href={PHONE_URL} class="text-ocean-700 hover:underline">{COMPANY.phone}</a>
 							</div>
 						</div>
 						<div class="cs-iconbox">
@@ -104,6 +107,37 @@ import { WHATSAPP_URL, PHONE_URL } from '../data/content';
 								<p class="text-ash-700">Lunes a viernes, 9:00 – 18:00 (GMT-6)</p>
 							</div>
 						</div>
+						<div class="cs-iconbox">
+							<span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-mint-500 text-ink">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+									<path
+										d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"
+										fill="currentColor"></path>
+								</svg>
+							</span>
+							<div>
+								<h3 class="font-semibold text-ink">Domicilio fiscal</h3>
+								<p class="text-ash-700">{COMPANY.formattedAddress}</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="cs-card mt-10 p-8">
+						<h3 class="text-lg font-semibold text-ink">Datos de la empresa</h3>
+						<dl class="mt-4 space-y-3 text-sm">
+							<div>
+								<dt class="font-medium text-ink">Razón social</dt>
+								<dd class="text-ash-700">{COMPANY.legalNameFull}</dd>
+							</div>
+							<div>
+								<dt class="font-medium text-ink">RFC</dt>
+								<dd class="text-ash-700">{COMPANY.rfc}</dd>
+							</div>
+							<div>
+								<dt class="font-medium text-ink">Marca comercial</dt>
+								<dd class="text-ash-700">{COMPANY.brandName}</dd>
+							</div>
+						</dl>
 					</div>
 
 					<div class="mt-10 overflow-hidden rounded-2xl">

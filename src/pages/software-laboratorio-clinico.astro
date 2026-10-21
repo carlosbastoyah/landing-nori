@@ -1,0 +1,129 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import SolutionPage from '../components/sections/SolutionPage.astro';
+import desktopDiagnostico from '../assets/mockups/desktop-diagnostico.png';
+import desktopCasos from '../assets/mockups/desktop-casos.png';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Software para laboratorio clínico' }];
+
+const features = [
+	{
+		title: 'Órdenes y casos',
+		description:
+			'Recibe cada solicitud con paciente, médico solicitante, estudios y sucursal. Ve de un vistazo qué es urgente, qué falta por entregar y qué falta por cobrar.',
+	},
+	{
+		title: 'Captura de resultados',
+		description:
+			'Registra resultados por variable con su unidad y valores de referencia, como en una biometría hemática, sin hojas de cálculo.',
+	},
+	{
+		title: 'Catálogo de estudios',
+		description:
+			'Organiza tus estudios por categoría con código y precio por forma de pago, para cotizar y cobrar siempre igual.',
+	},
+	{
+		title: 'CRM de médicos y clientes',
+		description:
+			'Administra médicos solicitantes, pacientes y clientes, los convenios de cada uno y el seguimiento de cada relación.',
+	},
+	{
+		title: 'Reportes de resultados',
+		description:
+			'Genera reportes con tu plantilla y los datos del paciente llenados automáticamente. Exporta a PDF o Word.',
+	},
+	{
+		title: 'Seguimiento, cobro y facturación',
+		description:
+			'Cada caso pasa por recibido, en proceso, completado y entregado, con su estado de pago e historial. Facturación integrada próximamente.',
+	},
+];
+
+const steps = [
+	{
+		title: 'Recepción',
+		description: 'Registra al paciente, el médico y los estudios solicitados en segundos.',
+	},
+	{
+		title: 'Proceso',
+		description: 'El equipo ve qué estudios están pendientes y cuáles son urgentes.',
+	},
+	{
+		title: 'Resultados',
+		description: 'Captura resultados con valores de referencia y revisa el reporte antes de completarlo.',
+	},
+	{
+		title: 'Entrega',
+		description: 'Exporta el reporte, registra la entrega y el pago, y deja todo trazado.',
+	},
+];
+
+const faqs = [
+	{
+		question: '¿Qué es un LIS o sistema de información de laboratorio?',
+		answer:
+			'Un LIS (Laboratory Information System) es el software que administra la operación de un laboratorio: recepción de órdenes, seguimiento de muestras, captura de resultados, reportes y cobro. Nori cumple esa función para laboratorios clínicos y de patología.',
+	},
+	{
+		question: '¿Qué áreas del laboratorio clínico puedo manejar?',
+		answer:
+			'Puedes configurar tu catálogo con las áreas que manejes, por ejemplo hematología, química clínica o citología, cada una con sus estudios, precios y variables de resultado.',
+	},
+	{
+		question: '¿Puedo migrar desde Excel u otro sistema?',
+		answer:
+			'Sí. Te acompañamos en la migración de tu catálogo de estudios, médicos e información histórica, y en la configuración de tus flujos actuales.',
+	},
+	{
+		question: '¿Funciona en varias sucursales?',
+		answer: 'Sí. Cada caso queda asociado a la sucursal que lo recibe y puedes filtrar la operación por sucursal.',
+	},
+	{
+		question: '¿Se usa en web o hay que instalar algo?',
+		answer:
+			'Puedes usar Nori desde el navegador sin instalar nada o con la app de escritorio. Ambas comparten la misma cuenta y la misma información.',
+	},
+];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
+---
+
+<MarketingLayout
+	title="Software para laboratorio clínico (LIS) | Nori"
+	description="Sistema de información de laboratorio (LIS) para laboratorios clínicos: órdenes, resultados con valores de referencia, reportes, médicos y cobro. Agenda una demo de Nori."
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
+>
+	<SolutionPage
+		eyebrow="Sistema LIS"
+		title="Software para laboratorio clínico (LIS)"
+		intro="Nori es un sistema de información de laboratorio que reúne órdenes, resultados, reportes, médicos y cobro en un solo lugar, para que tu laboratorio clínico deje Excel y papel atrás."
+		heroImage={{
+			src: desktopDiagnostico,
+			alt: 'Captura de resultados de biometría hemática y vista previa del reporte en Nori',
+		}}
+		features={features}
+		steps={steps}
+		detailImage={{
+			src: desktopCasos,
+			alt: 'Lista de casos clínicos en Nori con estado, médico y pago',
+		}}
+		detailTitle="Visibilidad de cada orden, de la recepción al cobro"
+		detailText="La bandeja de casos muestra en tiempo real qué está en proceso, qué es urgente y qué falta por cobrar. Filtra por estado, médico, tipo de caso, sucursal o fecha."
+		detailPoints={[
+			'Filtros por estado, médico, sucursal y pago',
+			'Urgentes, por entregar y por cobrar a la vista',
+			'Detalle del caso con progreso y actividad',
+			'Mismo sistema en web y app de escritorio',
+		]}
+		faqs={faqs}
+		related={{ href: '/software-laboratorio-patologia/', label: 'Nori para laboratorios de patología' }}
+	/>
+</MarketingLayout>

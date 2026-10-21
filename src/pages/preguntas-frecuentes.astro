@@ -4,15 +4,28 @@ import PageHeading from '../components/layout/PageHeading.astro';
 import Accordion from '../components/ui/Accordion.astro';
 import Button from '../components/ui/Button.astro';
 import { faqs, WHATSAPP_URL } from '../data/content';
+
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Preguntas frecuentes' }];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
 ---
 
 <MarketingLayout
-	title="Preguntas frecuentes | Nori"
+	title="Preguntas frecuentes | Nori, software para laboratorios"
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
 	description="Respuestas a las preguntas más comunes sobre Nori: implementación, precios, seguridad y migración para laboratorios clínicos."
 >
 	<PageHeading
 		title="Preguntas frecuentes"
-		breadcrumb={[{ label: 'Inicio', href: '/' }, { label: 'FAQ' }]}
+		breadcrumb={breadcrumb}
 	/>
 
 	<section class="cs-section-gap">
