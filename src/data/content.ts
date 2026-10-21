@@ -221,7 +221,7 @@ export const faqs = [
 	{
 		question: '¿Cómo funciona el modelo de precios?',
 		answer:
-			'Ofrecemos planes según el tamaño y volumen de tu laboratorio. Agenda una demo para recibir una propuesta adaptada a tu operación.',
+			'Pagas una cuota mensual según tu plan (desde $690 MXN + IVA) más un cargo por cada caso procesado, que baja conforme crece tu volumen. No cobramos por usuario.',
 	},
 	{
 		question: '¿Mis datos están seguros?',
@@ -236,63 +236,6 @@ export const faqs = [
 	{
 		question: '¿Ofrecen soporte y capacitación?',
 		answer:
-			'Todos los planes incluyen soporte por WhatsApp y correo. Los planes superiores incluyen acompañamiento dedicado y sesiones de capacitación.',
-	},
-];
-
-export const pricingPlans = [
-	{
-		name: 'Esencial',
-		description: 'Para laboratorios que inician su digitalización operativa.',
-		priceMonthly: null,
-		priceYearly: null,
-		priceLabel: 'Consultar',
-		features: [
-			{ text: 'Gestión de casos y estudios', included: true },
-			{ text: 'Flujos básicos por especialidad', included: true },
-			{ text: 'Hasta 5 usuarios', included: true },
-			{ text: 'Reportes estándar', included: true },
-			{ text: 'Soporte por correo', included: true },
-			{ text: 'Integraciones avanzadas', included: false },
-			{ text: 'Acompañamiento dedicado', included: false },
-		],
-		cta: 'Solicitar demo',
-		featured: false,
-	},
-	{
-		name: 'Profesional',
-		description: 'El plan más elegido por laboratorios en crecimiento.',
-		priceMonthly: null,
-		priceYearly: null,
-		priceLabel: 'Consultar',
-		features: [
-			{ text: 'Todo lo del plan Esencial', included: true },
-			{ text: 'Flujos personalizados y alertas', included: true },
-			{ text: 'Usuarios ilimitados', included: true },
-			{ text: 'Reportería avanzada por rol', included: true },
-			{ text: 'Soporte prioritario WhatsApp', included: true },
-			{ text: 'Integraciones con sistemas externos', included: true },
-			{ text: 'Capacitación mensual', included: false },
-		],
-		cta: 'Agendar demo',
-		featured: true,
-	},
-	{
-		name: 'Empresarial',
-		description: 'Para redes de laboratorios y operaciones de alto volumen.',
-		priceMonthly: null,
-		priceYearly: null,
-		priceLabel: 'Consultar',
-		features: [
-			{ text: 'Todo lo del plan Profesional', included: true },
-			{ text: 'Multi-sede y permisos avanzados', included: true },
-			{ text: 'API e integraciones a medida', included: true },
-			{ text: 'SLA y soporte dedicado', included: true },
-			{ text: 'Capacitación y onboarding extendido', included: true },
-			{ text: 'Personalización de reportes', included: true },
-			{ text: 'Gerente de cuenta asignado', included: true },
-		],
-		cta: 'Hablar con ventas',
-		featured: false,
+			'Todos los planes incluyen soporte. Esencial cuenta con soporte estándar, Crecimiento y Escala con soporte prioritario, y Enterprise con soporte dedicado con SLA. Escala incluye onboarding.',
 	},
 ];

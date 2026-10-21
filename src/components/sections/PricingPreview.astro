@@ -1,10 +1,11 @@
 ---
 import SectionEyebrow from '../ui/SectionEyebrow.astro';
 import PricingCard from '../ui/PricingCard.astro';
-import { pricingPlans } from '../../data/content';
+import { pricingPlans } from '../../data/pricing';
 
 const planIcons = [
 	'/nori/template/icons/free.svg',
+	'/nori/template/icons/star-1.svg',
 	'/nori/template/icons/dimond.svg',
 	'/nori/template/icons/crown.svg',
 ];
@@ -17,29 +18,15 @@ const planIcons = [
 			<SectionEyebrow label="Precios" class="justify-center" />
 			<h2 class="cs-section-title mt-5">Planes para cada etapa de tu laboratorio</h2>
 			<p class="mt-4 text-ash-700">
-				Elige el plan que mejor se adapte a tu operación. Todos incluyen demo personalizada y acompañamiento en la
-				implementación.
+				Una cuota mensual más los casos que procesas, con tarifa por caso que baja conforme creces. Sin cobro por
+				usuario.
 			</p>
 		</div>
-		<div class="relative z-10 mt-14 grid gap-8 lg:grid-cols-3 lg:items-end">
-			{
-				pricingPlans.map((plan, index) => (
-					<PricingCard
-						name={plan.name}
-						description={plan.description}
-						priceLabel={plan.priceLabel}
-						features={plan.features}
-						cta={plan.cta}
-						featured={plan.featured}
-						icon={planIcons[index]}
-					/>
-				))
-			}
+		<div class="relative z-10 mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-4 xl:items-end">
+			{pricingPlans.map((plan, index) => <PricingCard plan={plan} icon={planIcons[index]} />)}
 		</div>
-		<div class="mt-8 text-center">
-			<a href="/precios/" class="text-sm font-semibold text-ocean-700 underline-offset-4 hover:underline">
-				Comparar planes en detalle →
-			</a>
+		<div class="mt-10 text-center">
+			<a href="/precios/#calculadora" class="cs-btn-outline">Calcular el precio para mi laboratorio</a>
 		</div>
 		<img
 			src="/nori/decorative/vector-6.svg"

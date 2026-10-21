@@ -1,23 +1,15 @@
 ---
 import CheckIcon from './CheckIcon.astro';
 import { WHATSAPP_URL } from '../../data/content';
-
-interface Feature {
-	text: string;
-	included: boolean;
-}
+import { caseTiers, formatMoney, formatUnitPrice, type PricingPlan } from '../../data/pricing';
 
 interface Props {
-	name: string;
-	description: string;
-	priceLabel: string;
-	features: Feature[];
-	cta: string;
-	featured?: boolean;
+	plan: PricingPlan;
 	icon?: string;
 }
 
-const { name, description, priceLabel, features, cta, featured = false, icon } = Astro.props;
+const { plan, icon } = Astro.props;
+const { name, description, monthlyBasePrice, features, cta, featured = false } = plan;
 ---
 
 <article class={`cs-pricing-table ${featured ? 'is-featured' : ''}`}>
@@ -27,7 +19,7 @@ const { name, description, priceLabel, features, cta, featured = false, icon } =
 				<div class="cs-pricing-shape" aria-hidden="true">
 					<img src="/nori/decorative/pricing-shape-1.svg" alt="" />
 				</div>
-				<span class="cs-pricing-badge">Más popular</span>
+				<span class="cs-pricing-badge">Recomendado</span>
 			</>
 		)
 	}
@@ -41,9 +33,26 @@ const { name, description, priceLabel, features, cta, featured = false, icon } =
 			)
 		}
 	</div>
-	<div class="mb-5">
-		<div class="font-display text-[48px] leading-none font-semibold text-ink">{priceLabel}</div>
-		<p class="mt-2 text-sm text-ash-700">{description}</p>
+	<p class="min-h-[3em] text-sm text-ash-700">{description}</p>
+	<div class="mt-5">
+		{
+			monthlyBasePrice === null ? (
+				<>
+					<div class="font-display text-[40px] leading-none font-semibold text-ink">A medida</div>
+					<p class="mt-2 text-sm text-ash-700">Tarifa plana negociada</p>
+				</>
+			) : (
+				<>
+					<div class="flex items-baseline gap-1.5">
+						<span class="font-display text-[40px] leading-none font-semibold text-ink">
+							{formatMoney(monthlyBasePrice)}
+						</span>
+						<span class="text-sm text-ash-700">MXN/mes</span>
+					</div>
+					<p class="mt-2 text-sm text-ash-700">+ IVA · + desde {formatUnitPrice(caseTiers[0].unitPrice)} por caso</p>
+				</>
+			)
+		}
 	</div>
 	<div class="cs-pricing-separator"></div>
 	<ul class="cs-pricing-features mb-8">

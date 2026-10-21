@@ -3,41 +3,465 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 import PageHeading from '../components/layout/PageHeading.astro';
 import PricingCard from '../components/ui/PricingCard.astro';
 import SectionEyebrow from '../components/ui/SectionEyebrow.astro';
-import { pricingPlans } from '../data/content';
+import Accordion from '../components/ui/Accordion.astro';
+import { WHATSAPP_URL } from '../data/content';
+import {
+	addOnPrice,
+	addOns,
+	analyticsLabels,
+	caseTiers,
+	formatMoney,
+	formatUnitPrice,
+	IVA_RATE,
+	pricingPlans,
+	standardPlans,
+	storageBlock,
+	type AddOnCode,
+	type PricingPlan,
+} from '../data/pricing';
 
 const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Precios' }];
+
+const planIcons = [
+	'/nori/template/icons/free.svg',
+	'/nori/template/icons/star-1.svg',
+	'/nori/template/icons/dimond.svg',
+	'/nori/template/icons/crown.svg',
+];
+
+const supportLevels = { standard: 'Estándar', priority: 'Prioritario', dedicated: 'Dedicado con SLA' };
+
+const formatCount = (value: number) => value.toLocaleString('es-MX');
+
+// Worked example for the tier explanation: 700 cases spans the first two tiers.
+const exampleCases = 700;
+const exampleFirst = caseTiers[0].to!;
+const exampleRest = exampleCases - exampleFirst;
+const exampleTotal = exampleFirst * caseTiers[0].unitPrice + exampleRest * caseTiers[1].unitPrice;
+
+function addOnCell(plan: PricingPlan, code: AddOnCode) {
+	const rule = plan.addOns[code];
+	if (rule.availability === 'included') return 'Incluido';
+	if (addOns.find((addOn) => addOn.code === code)?.priceToConfirm) return 'Opcional';
+	const discount = rule.discountPercent ? ` (−${rule.discountPercent * 100}%)` : '';
+	return `${formatMoney(addOnPrice(plan, code))}/mes${discount}`;
+}
+
+const comparisonRows: { label: string; values: string[] }[] = [
+	{
+		label: 'Cuota mensual',
+		values: pricingPlans.map((plan) =>
+			plan.monthlyBasePrice === null ? 'A medida' : `${formatMoney(plan.monthlyBasePrice)} + IVA`,
+		),
+	},
+	{
+		label: 'Precio por caso',
+		values: pricingPlans.map((plan) =>
+			plan.monthlyBasePrice === null ? 'Tarifa plana negociada' : 'Por tramos de volumen',
+		),
+	},
+	{
+		label: 'Almacenamiento incluido',
+		values: pricingPlans.map((plan) => (plan.storageIncludedGb === null ? 'A medida' : `${plan.storageIncludedGb} GB`)),
+	},
+	{ label: 'Soporte', values: pricingPlans.map((plan) => supportLevels[plan.support]) },
+	{ label: 'Analytics', values: pricingPlans.map((plan) => analyticsLabels[plan.analytics]) },
+	...addOns.map((addOn) => ({ label: addOn.name, values: pricingPlans.map((plan) => addOnCell(plan, addOn.code)) })),
+	{
+		label: 'Timbre CFDI',
+		values: pricingPlans.map((plan) => (plan.cfdiStampPrice === null ? 'Negociado' : `${formatUnitPrice(plan.cfdiStampPrice)} c/u`)),
+	},
+];
+
+const pricingFaqs = [
+	{
+		question: '¿Los precios incluyen IVA?',
+		answer: `No. Todos los precios están en pesos mexicanos (MXN) y se les suma el ${IVA_RATE * 100}% de IVA.`,
+	},
+	{
+		question: '¿Cómo se cobra cada caso?',
+		answer: `Por tramos progresivos: cada tramo se cobra a su propio precio. Con ${formatCount(exampleCases)} casos al mes pagas ${exampleFirst} × ${formatUnitPrice(caseTiers[0].unitPrice)} + ${exampleRest} × ${formatUnitPrice(caseTiers[1].unitPrice)} = ${formatMoney(exampleTotal)}, además de la cuota de tu plan.`,
+	},
+	{
+		question: '¿Cobran por usuario?',
+		answer: 'No. El precio depende de tu plan y del volumen de casos, no de cuántas personas usan Nori.',
+	},
+	{
+		question: '¿Qué pasa si necesito más almacenamiento?',
+		answer: `Puedes ampliar el almacenamiento incluido en bloques de ${storageBlock.sizeGb} GB por ${formatMoney(storageBlock.price)} al mes cada uno.`,
+	},
+	{
+		question: '¿Cuándo se cobran los timbres CFDI?',
+		answer:
+			'Solo si tienes activo el módulo de Facturación. Cada timbre emitido se cobra al precio de tu plan y se incluye en tu factura mensual.',
+	},
+	{
+		question: '¿Puedo cambiar de plan?',
+		answer: 'Sí. Puedes cambiar de plan conforme crece tu laboratorio; el nuevo plan aplica a partir del siguiente ciclo mensual.',
+	},
+];
+
+const schema = [
+	{
+		'@type': 'SoftwareApplication',
+		name: 'Nori',
+		applicationCategory: 'BusinessApplication',
+		operatingSystem: 'Windows, macOS, Web',
+		offers: standardPlans.map((plan) => ({
+			'@type': 'Offer',
+			name: `Nori ${plan.name}`,
+			price: plan.monthlyBasePrice,
+			priceCurrency: 'MXN',
+			priceSpecification: {
+				'@type': 'UnitPriceSpecification',
+				price: plan.monthlyBasePrice,
+				priceCurrency: 'MXN',
+				unitText: 'MONTH',
+				valueAddedTaxIncluded: false,
+			},
+		})),
+	},
+	{
+		'@type': 'FAQPage',
+		mainEntity: pricingFaqs.map((faq) => ({
+			'@type': 'Question',
+			name: faq.question,
+			acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+		})),
+	},
+];
+
+const breakdownRows = [
+	{ key: 'base', label: 'Cuota del plan' },
+	{ key: 'cases', label: 'Casos' },
+	{ key: 'billing', label: 'Facturación CFDI' },
+	{ key: 'stamps', label: 'Timbres CFDI' },
+	{ key: 'inventory', label: 'Inventario' },
+];
 ---
 
 <MarketingLayout
 	title="Precios y planes | Nori, software para laboratorios"
 	breadcrumb={breadcrumb}
-	description="Conoce los planes de Nori para laboratorios clínicos y de patología. Desde implementación básica hasta soluciones empresariales."
+	schema={schema}
+	description="Planes de Nori desde $690 MXN al mes: Esencial, Crecimiento, Escala y Enterprise. Cuota mensual más tarifa por caso que baja con tu volumen. Calcula tu precio."
 >
-	<PageHeading title="Nuestros precios" breadcrumb={breadcrumb} />
+	<PageHeading title="Precios" breadcrumb={breadcrumb} />
 
 	<section class="cs-section-gap">
 		<div class="cs-container">
 			<div class="mx-auto max-w-2xl text-center">
-				<SectionEyebrow label="Planes flexibles" class="justify-center" />
+				<SectionEyebrow label="Planes transparentes" class="justify-center" />
+				<h2 class="cs-section-title mt-5">Paga por lo que procesa tu laboratorio</h2>
 				<p class="mt-4 text-ash-700">
-					Todos los planes incluyen demo personalizada. Contáctanos para recibir una propuesta adaptada al volumen
-					y necesidades de tu laboratorio.
+					Una cuota mensual según tu plan más un cargo por caso que baja conforme crece tu volumen. Sin cobro por
+					usuario. Precios en MXN más IVA.
 				</p>
 			</div>
-			<div class="mt-14 grid gap-8 lg:grid-cols-3 lg:items-end">
-				{
-					pricingPlans.map((plan) => (
-						<PricingCard
-							name={plan.name}
-							description={plan.description}
-							priceLabel={plan.priceLabel}
-							features={plan.features}
-							cta={plan.cta}
-							featured={plan.featured}
+			<div class="mt-14 grid gap-8 md:grid-cols-2 xl:grid-cols-4 xl:items-end">
+				{pricingPlans.map((plan, index) => <PricingCard plan={plan} icon={planIcons[index]} />)}
+			</div>
+		</div>
+	</section>
+
+	<section id="calculadora" class="scroll-mt-32 bg-paper py-20 lg:py-24">
+		<div class="cs-container">
+			<div class="mx-auto mb-12 max-w-2xl text-center">
+				<SectionEyebrow label="Calculadora" class="justify-center" />
+				<h2 class="cs-section-title mt-5">Calcula cuánto pagarías al mes</h2>
+				<p class="mt-4 text-ash-700">Ingresa tu volumen mensual y compara los planes con tu operación real.</p>
+			</div>
+
+			<div class="grid gap-8 lg:grid-cols-[360px_1fr]" data-pricing-calculator>
+				<form class="cs-card space-y-7 p-8" onsubmit="return false">
+					<div>
+						<label for="calc-cases" class="font-semibold text-ink">Casos al mes</label>
+						<input
+							id="calc-cases"
+							type="number"
+							min="0"
+							max="100000"
+							step="10"
+							value="700"
+							inputmode="numeric"
+							class="cs-newsletter-input mt-3 pl-5! text-lg"
+							data-calc-cases
 						/>
-					))
-				}
+						<input
+							type="range"
+							min="0"
+							max="5000"
+							step="50"
+							value="700"
+							class="mt-4 w-full accent-[var(--ink)]"
+							aria-label="Casos al mes"
+							data-calc-cases-range
+						/>
+					</div>
+
+					<div class="space-y-4">
+						<label class="flex cursor-pointer items-start gap-3">
+							<input type="checkbox" class="mt-1 h-4 w-4 accent-[var(--ink)]" data-calc-addon="billing" />
+							<span>
+								<span class="block font-semibold text-ink">Facturación (CFDI)</span>
+								<span class="text-sm">Facturas, pagos y timbrado fiscal</span>
+							</span>
+						</label>
+						<div class="hidden pl-7" data-calc-stamps-wrap>
+							<label for="calc-stamps" class="text-sm font-semibold text-ink">Timbres al mes</label>
+							<input
+								id="calc-stamps"
+								type="number"
+								min="0"
+								step="10"
+								value="100"
+								inputmode="numeric"
+								class="cs-newsletter-input mt-2 pl-5!"
+								data-calc-stamps
+							/>
+						</div>
+						<label class="flex cursor-pointer items-start gap-3">
+							<input type="checkbox" class="mt-1 h-4 w-4 accent-[var(--ink)]" data-calc-addon="inventory" />
+							<span>
+								<span class="block font-semibold text-ink">Inventario</span>
+								<span class="text-sm">Reactivos, lotes y caducidades</span>
+							</span>
+						</label>
+					</div>
+
+					<p class="text-xs leading-relaxed text-ash-500">
+						Estimación con precios de lista en MXN. Tu cotización final puede incluir almacenamiento adicional o
+						condiciones negociadas.
+					</p>
+				</form>
+
+				<div>
+					<p class="mb-5 hidden rounded-2xl bg-mint-300 px-5 py-4 text-sm text-ink" data-calc-negotiation>
+						Con más de {formatCount(caseTiers[3].to!)} casos al mes la tarifa por caso se negocia. Te recomendamos
+						<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="font-semibold underline">
+							cotizar Enterprise</a
+						>.
+					</p>
+					<div class="grid gap-6 md:grid-cols-3">
+						{
+							standardPlans.map((plan) => (
+								<article class="cs-card relative flex flex-col p-6" data-calc-plan={plan.code}>
+									<span
+										class="absolute -top-3 left-6 hidden rounded-full bg-ink-deep px-3 py-1 text-xs font-semibold text-white"
+										data-calc-best
+									>
+										Mejor precio para ti
+									</span>
+									<h3 class="text-xl font-semibold text-ink">{plan.name}</h3>
+									<p class="mt-3 font-display text-3xl font-semibold text-ink" data-calc-total>
+										—
+									</p>
+									<p class="text-sm text-ash-700">al mes con IVA</p>
+									<dl class="mt-5 space-y-2 border-t border-line pt-5 text-sm">
+										{breakdownRows.map((row) => (
+											<div class="flex justify-between gap-3" data-calc-row={row.key}>
+												<dt>{row.label}</dt>
+												<dd class="text-ink" data-calc-value />
+											</div>
+										))}
+										<div class="flex justify-between gap-3 border-t border-line pt-2">
+											<dt>Subtotal</dt>
+											<dd class="text-ink" data-calc-subtotal />
+										</div>
+										<div class="flex justify-between gap-3">
+											<dt>IVA {IVA_RATE * 100}%</dt>
+											<dd class="text-ink" data-calc-tax />
+										</div>
+									</dl>
+								</article>
+							))
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="cs-section-gap">
+		<div class="cs-container">
+			<div class="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-center lg:gap-16">
+				<div>
+					<SectionEyebrow label="Tarifa por caso" />
+					<h2 class="cs-section-title mt-5">Entre más casos procesas, menos pagas por cada uno</h2>
+					<p class="mt-5 leading-relaxed text-ash-700">
+						La tarifa por caso es la misma en Esencial, Crecimiento y Escala, y se cobra por tramos progresivos. Por
+						ejemplo, con {formatCount(exampleCases)} casos al mes pagas {exampleFirst} × {formatUnitPrice(caseTiers[0].unitPrice)}
+						+ {exampleRest} × {formatUnitPrice(caseTiers[1].unitPrice)} = <strong class="text-ink">{formatMoney(exampleTotal)}</strong>.
+					</p>
+				</div>
+				<div class="cs-card overflow-hidden">
+					<table class="w-full text-left">
+						<thead class="bg-ink-deep text-white">
+							<tr>
+								<th scope="col" class="px-6 py-4 font-semibold">Casos al mes</th>
+								<th scope="col" class="px-6 py-4 text-right font-semibold">Precio por caso</th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								caseTiers.map((tier) => (
+									<tr class="border-t border-line first:border-t-0">
+										<td class="px-6 py-4 text-ink">
+											{tier.to === null
+												? `${formatCount(tier.from)} o más`
+												: `${formatCount(tier.from)} – ${formatCount(tier.to)}`}
+										</td>
+										<td class="px-6 py-4 text-right font-semibold text-ink">
+											{formatUnitPrice(tier.unitPrice)}
+											{tier.requiresNegotiation && <span class="ml-1 text-sm font-normal text-ash-700">(negociado)</span>}
+										</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="bg-paper py-20 lg:py-24">
+		<div class="cs-container">
+			<div class="mx-auto mb-12 max-w-2xl text-center">
+				<SectionEyebrow label="Comparativa" class="justify-center" />
+				<h2 class="cs-section-title mt-5">Compara los planes en detalle</h2>
+			</div>
+			<div class="cs-card overflow-x-auto">
+				<table class="w-full min-w-[760px] text-left text-sm">
+					<thead>
+						<tr class="border-b border-line">
+							<th scope="col" class="px-6 py-5"><span class="sr-only">Característica</span></th>
+							{
+								pricingPlans.map((plan) => (
+									<th scope="col" class={`px-6 py-5 font-display text-lg font-semibold text-ink ${plan.featured ? 'bg-mint-100' : ''}`}>
+										{plan.name}
+									</th>
+								))
+							}
+						</tr>
+					</thead>
+					<tbody>
+						{
+							comparisonRows.map((row) => (
+								<tr class="border-b border-line last:border-b-0">
+									<th scope="row" class="px-6 py-4 font-semibold text-ink">
+										{row.label}
+									</th>
+									{row.values.map((value, index) => (
+										<td class={`px-6 py-4 ${pricingPlans[index].featured ? 'bg-mint-100' : ''}`}>{value}</td>
+									))}
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-5 text-center text-sm text-ash-700">
+				Almacenamiento adicional: {formatMoney(storageBlock.price)} por cada {storageBlock.sizeGb} GB al mes. Precios en
+				MXN más IVA.
+			</p>
+		</div>
+	</section>
+
+	<section class="cs-section-gap">
+		<div class="cs-container">
+			<div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+				<div>
+					<h2 class="cs-section-title">Preguntas sobre precios</h2>
+					<p class="mt-5 leading-relaxed text-ash-700">
+						¿Tienes un volumen especial o varias sedes? Te preparamos una cotización a la medida.
+					</p>
+					<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="cs-btn-template mt-8">
+						<span>Pedir cotización</span>
+					</a>
+				</div>
+				<Accordion items={pricingFaqs} variant="template" />
 			</div>
 		</div>
 	</section>
 </MarketingLayout>
+
+<script>
+	import { addOnPrice, caseTiers, formatMoney, IVA_RATE, standardPlans, type PricingPlan } from '../data/pricing';
+
+	/** Same progressive algorithm as the API's quote engine: each tier is billed at its own unit price. */
+	function casesCost(cases: number) {
+		return caseTiers.reduce((total, tier) => {
+			const upper = tier.to ?? Infinity;
+			const inTier = Math.max(0, Math.min(cases, upper) - tier.from + 1);
+			return total + inTier * tier.unitPrice;
+		}, 0);
+	}
+
+	function quote(plan: PricingPlan, cases: number, billing: boolean, stamps: number, inventory: boolean) {
+		const lines = {
+			base: plan.monthlyBasePrice ?? 0,
+			cases: casesCost(cases),
+			billing: billing ? addOnPrice(plan, 'billing') : null,
+			stamps: billing ? stamps * (plan.cfdiStampPrice ?? 0) : null,
+			inventory: inventory ? addOnPrice(plan, 'inventory') : null,
+		};
+		const subtotal = Object.values(lines).reduce<number>((sum, amount) => sum + (amount ?? 0), 0);
+		const tax = Math.round(subtotal * IVA_RATE * 100) / 100;
+		return { lines, subtotal, tax, total: subtotal + tax };
+	}
+
+	const root = document.querySelector('[data-pricing-calculator]');
+	if (root) {
+		const casesInput = root.querySelector<HTMLInputElement>('[data-calc-cases]')!;
+		const casesRange = root.querySelector<HTMLInputElement>('[data-calc-cases-range]')!;
+		const stampsInput = root.querySelector<HTMLInputElement>('[data-calc-stamps]')!;
+		const stampsWrap = root.querySelector('[data-calc-stamps-wrap]')!;
+		const billingInput = root.querySelector<HTMLInputElement>('[data-calc-addon="billing"]')!;
+		const inventoryInput = root.querySelector<HTMLInputElement>('[data-calc-addon="inventory"]')!;
+		const negotiation = root.querySelector('[data-calc-negotiation]')!;
+		const negotiationThreshold = caseTiers.find((tier) => tier.requiresNegotiation)!.from;
+
+		const readCount = (input: HTMLInputElement) => Math.max(0, Math.floor(Number(input.value) || 0));
+
+		const render = () => {
+			const cases = readCount(casesInput);
+			const stamps = readCount(stampsInput);
+			const billing = billingInput.checked;
+			stampsWrap.classList.toggle('hidden', !billing);
+			negotiation.classList.toggle('hidden', cases < negotiationThreshold);
+
+			const quotes = standardPlans.map((plan) => ({
+				plan,
+				result: quote(plan, cases, billing, stamps, inventoryInput.checked),
+			}));
+			const cheapest = quotes.reduce((best, current) => (current.result.total < best.result.total ? current : best));
+
+			quotes.forEach(({ plan, result }) => {
+				const card = root.querySelector(`[data-calc-plan="${plan.code}"]`)!;
+				card.classList.toggle('is-recommended', plan === cheapest.plan);
+				card.querySelector('[data-calc-best]')!.classList.toggle('hidden', plan !== cheapest.plan);
+				card.querySelector('[data-calc-total]')!.textContent = formatMoney(result.total);
+				card.querySelector('[data-calc-subtotal]')!.textContent = formatMoney(result.subtotal);
+				card.querySelector('[data-calc-tax]')!.textContent = formatMoney(result.tax);
+				Object.entries(result.lines).forEach(([key, amount]) => {
+					const row = card.querySelector(`[data-calc-row="${key}"]`)!;
+					row.classList.toggle('hidden', amount === null);
+					const included = key === 'billing' && amount === 0;
+					row.querySelector('[data-calc-value]')!.textContent = included ? 'Incluido' : formatMoney(amount ?? 0);
+				});
+			});
+		};
+
+		casesInput.addEventListener('input', () => {
+			casesRange.value = String(Math.min(readCount(casesInput), Number(casesRange.max)));
+			render();
+		});
+		casesRange.addEventListener('input', () => {
+			casesInput.value = casesRange.value;
+			render();
+		});
+		[stampsInput, billingInput, inventoryInput].forEach((input) => input.addEventListener('input', render));
+		render();
+	}
+</script>
