@@ -1,5 +1,5 @@
 ---
-import { PUBLIC_GTM_ID } from 'astro:env/client';
+import { PUBLIC_GA_MEASUREMENT_ID, PUBLIC_GTM_ID } from 'astro:env/client';
 
 interface Props {
 	/** `head` loads the container; `body` is the noscript fallback, placed right after <body>. */
@@ -10,7 +10,24 @@ const { part } = Astro.props;
 
 // Only production builds report, so local development never pollutes the analytics data
 const gtmId = import.meta.env.PROD ? PUBLIC_GTM_ID : undefined;
+const gaId = import.meta.env.PROD ? PUBLIC_GA_MEASUREMENT_ID : undefined;
 ---
+
+{
+	gaId && part === 'head' && (
+		<>
+			<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+			<script is:inline define:vars={{ gaId }}>
+				window.dataLayer = window.dataLayer || [];
+				window.gtag = function () {
+					window.dataLayer.push(arguments);
+				};
+				window.gtag('js', new Date());
+				window.gtag('config', gaId);
+			</script>
+		</>
+	)
+}
 
 {
 	gtmId && part === 'head' && (
@@ -26,9 +43,17 @@ const gtmId = import.meta.env.PROD ? PUBLIC_GTM_ID : undefined;
 				f.parentNode.insertBefore(j, f);
 			})(window, document, 'script', 'dataLayer', gtmId);
 
-			// Conversion events for GTM: use them as "Custom Event" triggers (generate_lead, file_download, sign_up_intent)
+		</script>
+	)
+}
+{
+	(gaId || gtmId) && part === 'head' && (
+		<script is:inline>
+			// Conversion events: sent to GA4 via gtag, and to the dataLayer as GTM "Custom Event" triggers
 			var track = function (event, params) {
-				window.dataLayer.push(Object.assign({ event: event, page_path: window.location.pathname }, params));
+				var data = Object.assign({ page_path: window.location.pathname }, params);
+				if (window.gtag) window.gtag('event', event, data);
+				else (window.dataLayer = window.dataLayer || []).push(Object.assign({ event: event }, data));
 			};
 
 			document.addEventListener('click', function (e) {

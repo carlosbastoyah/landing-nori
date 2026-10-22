@@ -10,7 +10,9 @@ export default defineConfig({
 	integrations: [sitemap()],
 	env: {
 		schema: {
-			/** Google Tag Manager container; GA4 and other tags are configured inside GTM. Set it empty to disable. */
+			/** GA4, loaded directly with gtag.js. Do NOT also add a GA4 tag inside GTM, or every visit counts twice. */
+			PUBLIC_GA_MEASUREMENT_ID: envField.string({ context: 'client', access: 'public', default: 'G-BE81NJVK72' }),
+			/** Google Tag Manager container for non-GA tags (ads pixels, etc.). Set it empty to disable. */
 			PUBLIC_GTM_ID: envField.string({ context: 'client', access: 'public', default: 'GTM-5T74VC56' }),
 			/** Google Search Console HTML-tag verification token (only the `content` value). */
 			PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({ context: 'client', access: 'public', optional: true }),
