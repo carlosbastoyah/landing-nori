@@ -460,8 +460,10 @@
       margin-right: 50px;
     }
 
+    /* Keep the toggle inside the header gutter instead of flush against the screen edge */
     .cs-menu-toggle {
       display: inline-block;
+      right: 30px;
     }
 
     .cs-mobile-nav {
@@ -520,6 +522,7 @@
     padding: 96px 0 40px;
     border-radius: 50px;
     background-color: var(--ink-deep);
+    background-image: url("/nori/decorative/hero-bg-1.svg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -661,9 +664,18 @@
   }
 
   @media (max-width: 991px) {
+    /* The wide decorative SVG gets scaled up on narrow panels and its dots/lines land on top of the text */
     .cs-hero-style-1 .cs-hero-content {
       min-height: 0;
       padding: 48px 20px 56px;
+      background-image:
+        radial-gradient(ellipse 90% 50% at 85% 0%, rgba(169, 224, 195, 0.14), transparent 60%),
+        radial-gradient(ellipse 70% 40% at 0% 100%, rgba(77, 139, 144, 0.22), transparent 60%);
+    }
+
+    .cs-hero-style-1 .cs-hero-subtitle {
+      font-size: 14px;
+      text-wrap: balance;
     }
 
     .cs-hero-style-1 .cs-hero-title {
@@ -855,8 +867,10 @@
     gap: 8px;
     border: 0;
     outline: 0;
-    padding: 21px 30px;
-    line-height: 1em;
+    padding: 19px 30px;
+    /* Room for a second line when a long label wraps on narrow cards */
+    line-height: 1.25;
+    text-align: center;
     border-radius: 100px;
     font-family: var(--font-display);
     font-size: 14px;
@@ -949,7 +963,7 @@
     .cs-btn-gradient,
     .cs-btn-dark,
     .cs-btn-outline {
-      padding: 18px 30px;
+      padding: 16px 24px;
     }
   }
 
@@ -1052,8 +1066,17 @@
   .cs-cta-panel {
     border-radius: 30px;
     background-color: var(--ink-deep);
+    background-image: url("/nori/decorative/cta-bg-1.svg");
     background-size: cover;
     background-position: center;
+  }
+
+  @media (max-width: 1023px) {
+    .cs-cta-panel {
+      background-image:
+        radial-gradient(ellipse 90% 45% at 100% 0%, rgba(169, 224, 195, 0.12), transparent 60%),
+        radial-gradient(ellipse 80% 40% at 0% 100%, rgba(77, 139, 144, 0.2), transparent 60%);
+    }
   }
 
   .cs-cta-thumb {
@@ -1447,6 +1470,13 @@
   /* --- Pricing table (template) --- */
   .cs-pricing-table {
     @apply relative flex h-full flex-col rounded-[30px] border border-line bg-[#f5f5f5] px-8 pt-12 pb-10 transition duration-300;
+  }
+
+  /* Four cards share the row from xl up; trim side padding so features and CTAs don't wrap */
+  @media (min-width: 1280px) {
+    .cs-pricing-table {
+      @apply px-6;
+    }
   }
 
   .cs-pricing-table > * {
