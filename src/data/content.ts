@@ -1,4 +1,4 @@
-export const WHATSAPP_PHONE = '529994533797';
+export const WHATSAPP_PHONE = '525564210442';
 
 /** WhatsApp chat link with a prefilled message. */
 export function whatsappUrl(text: string): string {
@@ -10,7 +10,7 @@ export const WHATSAPP_URL = whatsappUrl(
 	'Hola, quiero conocer más sobre la plataforma para laboratorios clínicos y de patología.'
 );
 
-export const PHONE_URL = 'tel:+529994533797';
+export const PHONE_URL = 'tel:+525564210442';
 
 /** Official profiles; leave a value empty to hide its icon in the footer. */
 export const SOCIAL_URLS = {
@@ -33,7 +33,7 @@ export const COMPANY = {
 	legalNameShort: 'Wersoft Solutions S.A.P.I. de C.V.',
 	rfc: 'WSO260707KC6',
 	tradeName: 'WERSOFT',
-	phone: '+52 999 453 3797',
+	phone: '+52 56 6421 0442',
 	address: {
 		street: 'Calle 55 C 988',
 		neighborhood: 'Las Américas II',
