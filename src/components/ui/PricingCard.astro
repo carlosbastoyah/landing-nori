@@ -1,7 +1,7 @@
 ---
 import CheckIcon from './CheckIcon.astro';
 import { WHATSAPP_URL } from '../../data/content';
-import { caseTiers, formatMoney, formatUnitPrice, type PricingPlan } from '../../data/pricing';
+import { formatMoney, formatUnitPrice, type PricingPlan } from '../../data/pricing';
 
 interface Props {
 	plan: PricingPlan;
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { plan, icon } = Astro.props;
-const { name, description, monthlyBasePrice, features, cta, featured = false } = plan;
+const { name, description, monthlyBasePrice, includedStudies, extraStudyPrice, features, cta, featured = false } = plan;
 ---
 
 <article class={`cs-pricing-table ${featured ? 'is-featured' : ''}`}>
@@ -39,7 +39,7 @@ const { name, description, monthlyBasePrice, features, cta, featured = false } =
 			monthlyBasePrice === null ? (
 				<>
 					<div class="font-display text-[40px] leading-none font-semibold text-ink">A medida</div>
-					<p class="mt-2 text-sm text-ash-700">Tarifa plana negociada</p>
+					<p class="mt-2 text-sm text-ash-700">Precio fijo por estudio, mensual o anual</p>
 				</>
 			) : (
 				<>
@@ -49,7 +49,9 @@ const { name, description, monthlyBasePrice, features, cta, featured = false } =
 						</span>
 						<span class="text-sm text-ash-700">MXN/mes</span>
 					</div>
-					<p class="mt-2 text-sm text-ash-700">+ IVA · + desde {formatUnitPrice(caseTiers[0].unitPrice)} por caso</p>
+					<p class="mt-2 text-sm text-ash-700">
+						+ IVA · incluye {includedStudies?.toLocaleString('es-MX')} estudios, extra {formatUnitPrice(extraStudyPrice ?? 0)}
+					</p>
 				</>
 			)
 		}

@@ -19,6 +19,9 @@ interface Props {
 	detailPoints: string[];
 	faqs: { question: string; answer: string }[];
 	related: { href: string; label: string };
+	/** Sibling pages on the same topic, linked as cards before the FAQ to build the topic cluster. */
+	subpages?: { href: string; title: string; description: string }[];
+	subpagesTitle?: string;
 }
 
 const {
@@ -34,6 +37,8 @@ const {
 	detailPoints,
 	faqs,
 	related,
+	subpages = [],
+	subpagesTitle = 'Conoce más a fondo',
 } = Astro.props;
 ---
 
@@ -132,6 +137,27 @@ const {
 		</ol>
 	</div>
 </section>
+
+<slot />
+
+{
+	subpages.length > 0 && (
+		<section class="pb-20 lg:pb-28">
+			<div class="cs-container">
+				<h2 class="cs-section-title mb-10 text-center">{subpagesTitle}</h2>
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{subpages.map((page) => (
+						<a href={page.href} class="cs-card group block p-8">
+							<h3 class="text-xl font-semibold text-ink group-hover:text-ocean-700">{page.title}</h3>
+							<p class="mt-3 leading-relaxed text-ash-700">{page.description}</p>
+							<span class="mt-5 inline-block font-semibold text-ocean-700">Ver más →</span>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	)
+}
 
 <section class="pb-20 lg:pb-28">
 	<div class="cs-container">

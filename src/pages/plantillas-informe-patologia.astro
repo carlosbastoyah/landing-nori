@@ -1,0 +1,106 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import SolutionPage from '../components/sections/SolutionPage.astro';
+import { pathologySiblings } from '../data/pathology';
+import desktopPlantilla from '../assets/mockups/desktop-plantilla-reporte.png';
+import laptopPlantillas from '../assets/mockups/laptop-plantillas.png';
+
+const breadcrumb = [
+	{ label: 'Inicio', href: '/' },
+	{ label: 'Software de patología', href: '/software-laboratorio-patologia/' },
+	{ label: 'Plantillas de informe de patología' },
+];
+
+const features = [
+	{
+		title: 'Tu logo y encabezado',
+		description: 'Diseña el informe con la identidad de tu laboratorio y los datos de la sucursal que lo emite.',
+	},
+	{
+		title: 'Variables automáticas',
+		description: 'Nombre, edad, expediente, médico solicitante y fechas se llenan solos con los datos del caso.',
+	},
+	{
+		title: 'Secciones del informe',
+		description: 'Descripción macroscópica, descripción microscópica y diagnóstico en el orden que usas hoy.',
+	},
+	{
+		title: 'Con o sin fotografía',
+		description: 'Ten versiones del mismo informe con figuras de laminillas o solo con texto.',
+	},
+	{
+		title: 'Una plantilla por estudio',
+		description: 'Usa formatos distintos para biopsia, Papanicolaou, BAAF o inmunohistoquímica.',
+	},
+	{
+		title: 'PDF y Word',
+		description: 'Exporta el informe terminado en PDF para enviarlo o en Word si necesitas un ajuste final.',
+	},
+];
+
+const steps = [
+	{ title: 'Diseño', description: 'Crea la plantilla con tu logo, encabezado y secciones.' },
+	{ title: 'Variables', description: 'Coloca los datos del paciente, médico y sucursal que se llenarán solos.' },
+	{ title: 'Diagnóstico', description: 'El patólogo escribe sobre la plantilla con vista previa en tiempo real.' },
+	{ title: 'Exportación', description: 'Descarga el informe en PDF o Word, listo para entregar.' },
+];
+
+const faqs = [
+	{
+		question: '¿Puedo replicar el formato de informe que ya uso?',
+		answer:
+			'Sí. El editor te permite reproducir tu formato actual con tu logo, encabezados y secciones, para que tus médicos referentes sigan recibiendo el informe que ya conocen.',
+	},
+	{
+		question: '¿Qué datos se llenan automáticamente?',
+		answer:
+			'Los datos del paciente, del médico solicitante, de la sucursal y del caso. El patólogo solo escribe la descripción y el diagnóstico.',
+	},
+	{
+		question: '¿Puedo tener varias plantillas?',
+		answer:
+			'Sí. Puedes tener una plantilla para cada tipo de estudio y versiones con o sin fotografía.',
+	},
+	{
+		question: '¿El texto tiene revisión ortográfica?',
+		answer: 'Sí. El editor de diagnóstico incluye revisión ortográfica y vista previa del informe en tiempo real.',
+	},
+];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
+---
+
+<MarketingLayout
+	title="Plantillas de informe de patología con tu formato | Nori"
+	description="Crea plantillas de informe de anatomía patológica con tu logo, secciones macroscópica y diagnóstico, y datos del paciente que se llenan solos. Exporta a PDF y Word."
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
+>
+	<SolutionPage
+		eyebrow="Informes de patología"
+		title="Plantillas de informe de patología con tu formato"
+		intro="Diseña tus informes de anatomía patológica con tu logo y tus secciones. Los datos del paciente, el médico y la sucursal se llenan solos, y el patólogo solo se enfoca en el diagnóstico."
+		heroImage={{ src: desktopPlantilla, alt: 'Editor de plantillas de informe de patología en Nori' }}
+		features={features}
+		steps={steps}
+		detailImage={{ src: laptopPlantillas, alt: 'Lista de plantillas de informe por tipo de estudio en Nori' }}
+		detailTitle="Se acabó copiar y pegar en Word"
+		detailText="Cada informe parte de tu plantilla con los datos del caso ya colocados. Menos errores de captura, menos tiempo por informe y un formato idéntico en todas tus sucursales."
+		detailPoints={[
+			'Variables de paciente, médico y sucursal',
+			'Secciones macroscópica y diagnóstico',
+			'Versiones con o sin fotografía',
+			'Exportación a PDF y Word',
+		]}
+		faqs={faqs}
+		related={{ href: '/software-laboratorio-clinico/', label: 'Nori para laboratorios clínicos' }}
+		subpages={pathologySiblings('/plantillas-informe-patologia/')}
+	/>
+</MarketingLayout>

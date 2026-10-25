@@ -237,7 +237,7 @@ export const faqs = [
 	{
 		question: '¿Cómo funciona el modelo de precios?',
 		answer:
-			'Pagas una cuota mensual según tu plan (desde $690 MXN + IVA) más un cargo por cada caso procesado, que baja conforme crece tu volumen. No cobramos por usuario.',
+			'Pagas una cuota mensual según tu plan (desde $1,190 MXN + IVA) que ya incluye estudios al mes; los estudios extra se cobran aparte y cuestan menos en los planes más grandes. No cobramos por usuario.',
 	},
 	{
 		question: '¿Mis datos están seguros?',

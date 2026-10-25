@@ -361,10 +361,10 @@
     display: block;
   }
 
+  /* <button> already centers its content vertically, so no extra offset is needed */
   .cs-menu-toggle span {
     margin: 0 auto;
     position: relative;
-    top: 12px;
   }
 
   .cs-menu-toggle span::before,
@@ -483,9 +483,22 @@
       transform: translateX(0);
     }
 
-    .cs-mobile-nav a {
+    /* The bar (logo + close toggle) must stay above the open panel, which shares the header's stacking context */
+    .cs-site-header .cs-main-header {
+      position: relative;
+      z-index: 999;
+    }
+
+    .cs-site-header:has(.cs-mobile-nav.is-open) .cs-main-header {
+      background-color: #fff;
+      box-shadow: 0 1px 0 var(--line);
+    }
+
+    /* Scoped to the nav list so the CTA below keeps its own button colors */
+    .cs-mobile-nav nav a {
       display: block;
       padding: 12px 15px;
+      border-radius: 12px;
       font-family: var(--font-display);
       font-size: 18px;
       font-weight: 600;
@@ -493,10 +506,17 @@
       text-decoration: none;
     }
 
+    .cs-mobile-nav nav a:hover {
+      background: var(--paper-2);
+    }
+
     .cs-mobile-nav nav a[aria-current="page"] {
-      border-radius: 12px;
-      background: var(--mint-100);
+      background: var(--mint-300);
       color: var(--ink-deep);
+    }
+
+    .cs-mobile-nav .cs-btn-template {
+      width: 100%;
     }
   }
 
@@ -678,6 +698,12 @@
       text-wrap: balance;
     }
 
+    /* Stacked under the copy, the mockup supports the message instead of pushing it below the fold */
+    .cs-hero-style-1 .cs-hero-thumb {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
     .cs-hero-style-1 .cs-hero-title {
       font-size: 42px;
     }
@@ -689,6 +715,22 @@
 
     .cs-hero-style-1 .cs-btns-group {
       justify-content: center;
+    }
+  }
+
+  /* Phones: keep the headline short enough that the CTA lands in the first screen */
+  @media (max-width: 575px) {
+    .cs-hero-style-1 .cs-hero-content {
+      padding: 36px 16px 48px;
+    }
+
+    .cs-hero-style-1 .cs-hero-title {
+      font-size: 34px;
+      text-wrap: balance;
+    }
+
+    .cs-hero-style-1 .cs-hero-desc {
+      margin-bottom: 24px;
     }
   }
 

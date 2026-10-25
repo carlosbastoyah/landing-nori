@@ -11,7 +11,14 @@ const { part } = Astro.props;
 // Only production builds report, so local development never pollutes the analytics data
 const gtmId = import.meta.env.PROD ? PUBLIC_GTM_ID : undefined;
 const gaId = import.meta.env.PROD ? PUBLIC_GA_MEASUREMENT_ID : undefined;
+const ahrefsKey = import.meta.env.PROD ? 'QBS0QA4QNPvWO4wKGPnX6Q' : undefined;
 ---
+
+{
+	ahrefsKey && part === 'head' && (
+		<script is:inline async src="https://analytics.ahrefs.com/analytics.js" data-key={ahrefsKey} />
+	)
+}
 
 {
 	gaId && part === 'head' && (
@@ -67,6 +74,9 @@ const gaId = import.meta.env.PROD ? PUBLIC_GA_MEASUREMENT_ID : undefined;
 					track('generate_lead', { lead_method: 'phone' });
 				} else if (link.hasAttribute('data-download')) {
 					track('file_download', { download_platform: link.getAttribute('data-download') });
+				} else if (href.includes('app.wsnori.com')) {
+					var section = link.closest('section[id]');
+					track('web_app_click', { link_text: link.textContent.trim(), section: section ? section.id : '' });
 				}
 			});
 

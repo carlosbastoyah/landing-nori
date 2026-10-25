@@ -1,0 +1,107 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import SolutionPage from '../components/sections/SolutionPage.astro';
+import { pathologySiblings } from '../data/pathology';
+import desktopLaminillas from '../assets/mockups/desktop-laminillas.png';
+import desktopDiagnostico from '../assets/mockups/desktop-diagnostico.png';
+
+const breadcrumb = [
+	{ label: 'Inicio', href: '/' },
+	{ label: 'Software de patología', href: '/software-laboratorio-patologia/' },
+	{ label: 'Visor de laminillas' },
+];
+
+const features = [
+	{
+		title: 'Sube o escanea',
+		description: 'Agrega las imágenes de las laminillas al caso, ya sea escaneadas o tomadas con la cámara del microscopio.',
+	},
+	{
+		title: 'Zoom y navegación',
+		description: 'Recorre la laminilla y acércate a la región que te interesa sin salir del expediente del paciente.',
+	},
+	{
+		title: 'Hallazgos por región',
+		description: 'Marca las zonas relevantes de la imagen y describe cada hallazgo para que quede documentado en el caso.',
+	},
+	{
+		title: 'Figuras en el informe',
+		description: 'Adjunta los hallazgos marcados como figuras del informe de patología con un clic.',
+	},
+	{
+		title: 'Fotos del caso',
+		description: 'Además de las laminillas, sube fotografías macroscópicas y generales de la muestra.',
+	},
+	{
+		title: 'Todo en el expediente',
+		description: 'Las imágenes quedan guardadas con el caso, disponibles en web y escritorio para todo tu equipo.',
+	},
+];
+
+const steps = [
+	{ title: 'Carga', description: 'Sube o escanea las laminillas del caso desde la web o la app de escritorio.' },
+	{ title: 'Revisión', description: 'Navega con zoom y ubica las regiones relevantes de la muestra.' },
+	{ title: 'Anotación', description: 'Marca cada hallazgo por región y agrega su descripción.' },
+	{ title: 'Informe', description: 'Adjunta las figuras al informe y expórtalo en PDF o Word.' },
+];
+
+const faqs = [
+	{
+		question: '¿Qué es un visor de laminillas?',
+		answer:
+			'Es la herramienta que permite ver en pantalla las imágenes digitales de una laminilla de patología, acercarse a distintas regiones y documentar hallazgos. En Nori está integrado al caso del paciente y al informe.',
+	},
+	{
+		question: '¿Necesito un escáner de laminillas para usarlo?',
+		answer:
+			'No. Puedes subir fotografías tomadas con la cámara del microscopio. Si cuentas con un escáner, subes sus imágenes al caso de la misma forma.',
+	},
+	{
+		question: '¿Las imágenes aparecen en el informe que recibe el médico?',
+		answer:
+			'Sí, las que tú elijas. Los hallazgos marcados se adjuntan como figuras, y puedes usar una plantilla con fotografía o una sin ella.',
+	},
+	{
+		question: '¿Otro patólogo puede revisar las laminillas?',
+		answer:
+			'Sí. Las imágenes quedan en el caso, así que cualquier usuario de tu laboratorio con acceso puede consultarlas desde la web o la app de escritorio.',
+	},
+];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
+---
+
+<MarketingLayout
+	title="Visor de laminillas para patología digital | Nori"
+	description="Visor de laminillas integrado al software de patología: sube o escanea laminillas, navega con zoom, marca hallazgos por región y adjúntalos como figuras al informe."
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
+>
+	<SolutionPage
+		eyebrow="Patología digital"
+		title="Visor de laminillas integrado a tu informe de patología"
+		intro="Sube o escanea las laminillas de cada caso, navega con zoom, marca los hallazgos por región y adjúntalos como figuras al informe, todo sin salir del expediente del paciente."
+		heroImage={{ src: desktopLaminillas, alt: 'Visor de laminillas de Nori con hallazgos marcados sobre una biopsia' }}
+		features={features}
+		steps={steps}
+		detailImage={{ src: desktopDiagnostico, alt: 'Editor de diagnóstico de patología con figuras de laminillas en Nori' }}
+		detailTitle="Del hallazgo al informe sin capturas de pantalla"
+		detailText="Lo que marcas en el visor se convierte en una figura del informe. El patólogo documenta, el médico referente ve exactamente lo que se observó y nadie tiene que copiar ni pegar imágenes."
+		detailPoints={[
+			'Hallazgos marcados por región',
+			'Figuras adjuntas al informe',
+			'Plantillas con o sin fotografía',
+			'Imágenes guardadas en el caso',
+		]}
+		faqs={faqs}
+		related={{ href: '/software-laboratorio-clinico/', label: 'Nori para laboratorios clínicos' }}
+		subpages={pathologySiblings('/visor-de-laminillas/')}
+	/>
+</MarketingLayout>

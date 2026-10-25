@@ -1,10 +1,13 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import SolutionPage from '../components/sections/SolutionPage.astro';
+import SectionEyebrow from '../components/ui/SectionEyebrow.astro';
+import { pathologySiblings } from '../data/pathology';
+import { standardPlans, formatMoney } from '../data/pricing';
 import desktopLaminillas from '../assets/mockups/desktop-laminillas.png';
 import desktopPlantilla from '../assets/mockups/desktop-plantilla-reporte.png';
 
-const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Software para laboratorio de patología' }];
+const breadcrumb = [{ label: 'Inicio', href: '/' }, { label: 'Software de patología' }];
 
 const features = [
 	{
@@ -58,11 +61,65 @@ const steps = [
 	},
 ];
 
+const studyGroups = [
+	{
+		title: 'Histopatología y biopsias',
+		items: ['Biopsias por trucut, sacabocado o endoscópicas', 'Piezas quirúrgicas neoplásicas y no neoplásicas', 'Transoperatorios', 'Revisión de bloques y laminillas'],
+	},
+	{
+		title: 'Citología',
+		items: ['Papanicolaou convencional y en base líquida', 'BAAF de tiroides, mama, ganglio y tejidos blandos', 'Líquidos corporales y cepillados', 'Secreciones y extendidos'],
+	},
+	{
+		title: 'Técnicas complementarias',
+		items: ['Inmunohistoquímica y anticuerpos', 'Tinciones especiales (PAS, Masson, Grocott, Z.N.)', 'PCR en citología y biopsia', 'Estudios que agregues a tu catálogo'],
+	},
+];
+
+const reasons = [
+	{
+		title: 'Precios públicos',
+		description: 'Consulta los planes en nuestra página de precios sin tener que pedir una cotización.',
+	},
+	{
+		title: 'Web y escritorio',
+		description: 'Trabaja desde el navegador o con la app para Windows y macOS, con la misma cuenta y la misma información.',
+	},
+	{
+		title: 'Tu formato de siempre',
+		description: 'Replica tu formato de informe actual en el editor de plantillas para que tus médicos referentes reciban lo que ya conocen.',
+	},
+	{
+		title: 'Varias sucursales',
+		description: 'Cada caso queda ligado a su sucursal y el informe muestra los datos de quien lo emite.',
+	},
+	{
+		title: 'Soporte por WhatsApp',
+		description: 'Habla directo con nuestro equipo en México para resolver dudas o pedir ajustes.',
+	},
+	{
+		title: 'Clínico y patología juntos',
+		description: 'Si también haces análisis clínicos, manejas ambas áreas en el mismo sistema.',
+	},
+];
+
+const entryPlan = standardPlans[0];
+
 const faqs = [
+	{
+		question: '¿Qué es un software de patología?',
+		answer:
+			'Es un sistema de información de laboratorio (LIS) diseñado para anatomía patológica: registra cada caso desde la recepción de la muestra, sigue su procesamiento, permite redactar el diagnóstico sobre una plantilla y entrega el informe al médico o al paciente. Sustituye libretas, hojas de cálculo y documentos de Word sueltos.',
+	},
 	{
 		question: '¿Nori sirve para citología, biopsias y BAAF?',
 		answer:
 			'Sí. Puedes configurar tu catálogo con estudios de citología exfoliativa (Papanicolaou convencional y en base líquida), citología diversa como BAAF de tiroides, glándula mamaria o ganglio, biopsias e histopatología, cada uno con su categoría y precio.',
+	},
+	{
+		question: '¿Puedo manejar inmunohistoquímica y tinciones especiales?',
+		answer:
+			'Sí. Inmunohistoquímica, anticuerpos, tinciones especiales y PCR se registran como estudios de tu catálogo, con su propio precio, y se agregan al caso del paciente.',
 	},
 	{
 		question: '¿Puedo usar los formatos de reporte que ya tengo?',
@@ -84,6 +141,16 @@ const faqs = [
 		answer:
 			'Puedes usar Nori desde el navegador sin instalar nada o con la app de escritorio. Ambas comparten la misma cuenta y la misma información.',
 	},
+	{
+		question: '¿Cuánto cuesta el software de patología?',
+		answer:
+			`Nori se contrata por suscripción mensual desde ${formatMoney(entryPlan.monthlyBasePrice!)} MXN más IVA en el plan ${entryPlan.name}, que incluye ${entryPlan.includedStudies} estudios al mes. Todos los planes están publicados en la página de precios. Agenda una demo y te ayudamos a elegir el que corresponde al volumen de tu laboratorio.`,
+	},
+	{
+		question: '¿Cómo empiezo a usarlo?',
+		answer:
+			'Agenda una demo por WhatsApp. Te mostramos el sistema con el flujo de tu laboratorio, configuramos tu catálogo de estudios y tus plantillas de informe, y empiezas a registrar casos.',
+	},
 ];
 
 const faqSchema = {
@@ -97,24 +164,24 @@ const faqSchema = {
 ---
 
 <MarketingLayout
-	title="Software para laboratorio de patología | Nori"
-	description="Software para laboratorios de anatomía patológica: casos, biopsias y citologías, visor de laminillas, plantillas de informe y cobro en un solo sistema. Agenda una demo."
+	title="Software de patología para laboratorios de anatomía patológica | Nori"
+	description="Software de patología (LIS) para biopsias, citologías e inmunohistoquímica: visor de laminillas, plantillas de informe, multi-sucursal y cobro. Precios públicos. Agenda una demo."
 	breadcrumb={breadcrumb}
 	schema={[faqSchema]}
 >
 	<SolutionPage
 		eyebrow="Anatomía patológica"
-		title="Software para laboratorios de patología"
-		intro="Nori organiza cada biopsia, citología y pieza quirúrgica desde la recepción hasta la entrega del informe: laminillas, diagnóstico, plantillas y cobro en un solo sistema, en web y escritorio."
+		title="Software de patología para laboratorios de anatomía patológica"
+		intro="Nori es el sistema LIS que organiza cada biopsia, citología y pieza quirúrgica desde la recepción hasta la entrega del informe: laminillas, diagnóstico, plantillas y cobro en un solo sistema, en web y escritorio."
 		heroImage={{
 			src: desktopLaminillas,
-			alt: 'Visor de laminillas de Nori con anotaciones sobre una biopsia',
+			alt: 'Software de patología Nori: visor de laminillas con anotaciones sobre una biopsia',
 		}}
 		features={features}
 		steps={steps}
 		detailImage={{
 			src: desktopPlantilla,
-			alt: 'Editor de plantillas de reporte de anatomía patológica en Nori',
+			alt: 'Editor de plantillas de informe de anatomía patológica en Nori',
 		}}
 		detailTitle="Informes de patología con tu formato, sin copiar y pegar"
 		detailText="Crea plantillas de reporte con tu logo y tus secciones. Los datos del paciente, el médico, la sucursal y el caso se llenan solos, y el patólogo solo se enfoca en el diagnóstico."
@@ -126,5 +193,55 @@ const faqSchema = {
 		]}
 		faqs={faqs}
 		related={{ href: '/software-laboratorio-clinico/', label: 'Nori para laboratorios clínicos' }}
-	/>
+		subpages={pathologySiblings('/software-laboratorio-patologia/')}
+		subpagesTitle="Funciones del software de patología"
+	>
+		<section class="pb-20 lg:pb-28">
+			<div class="cs-container">
+				<div class="mx-auto mb-12 max-w-2xl text-center">
+					<SectionEyebrow label="Estudios" class="justify-center" />
+					<h2 class="cs-section-title mt-5">Los estudios de patología que manejas en Nori</h2>
+					<p class="mt-5 leading-relaxed text-ash-700">
+						Arma tu catálogo con los estudios que realiza tu laboratorio, cada uno con su categoría y precio.
+					</p>
+				</div>
+				<div class="grid gap-6 md:grid-cols-3">
+					{
+						studyGroups.map((group) => (
+							<article class="cs-card p-8">
+								<h3 class="text-xl font-semibold text-ink">{group.title}</h3>
+								<ul class="mt-4 space-y-2 text-ash-700">
+									{group.items.map((item) => (
+										<li class="flex items-start gap-2">
+											<span class="text-ocean-700" aria-hidden="true">•</span>
+											<span>{item}</span>
+										</li>
+									))}
+								</ul>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="bg-[#ecf1f5] py-20 lg:py-28 mb-20 lg:mb-28">
+			<div class="cs-container">
+				<div class="mx-auto mb-12 max-w-2xl text-center">
+					<SectionEyebrow label="Por qué Nori" class="justify-center" />
+					<h2 class="cs-section-title mt-5">¿Por qué elegir Nori como software de patología?</h2>
+				</div>
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{
+						reasons.map((reason) => (
+							<article class="cs-card p-8">
+								<h3 class="text-xl font-semibold text-ink">{reason.title}</h3>
+								<p class="mt-3 leading-relaxed text-ash-700">{reason.description}</p>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+	</SolutionPage>
 </MarketingLayout>

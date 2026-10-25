@@ -1,0 +1,130 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import SolutionPage from '../components/sections/SolutionPage.astro';
+import { pathologySiblings } from '../data/pathology';
+import webEstudios from '../assets/mockups/web-estudios.png';
+import desktopCasos from '../assets/mockups/desktop-casos.png';
+
+const breadcrumb = [
+	{ label: 'Inicio', href: '/' },
+	{ label: 'Software de patología', href: '/software-laboratorio-patologia/' },
+	{ label: 'Software de citología' },
+];
+
+const features = [
+	{
+		title: 'Citología exfoliativa',
+		description:
+			'Registra Papanicolaou convencional y en base líquida como estudios distintos, cada uno con su precio y su plantilla de informe.',
+	},
+	{
+		title: 'Citología diversa y BAAF',
+		description:
+			'Maneja BAAF de tiroides, glándula mamaria, ganglio y tejidos blandos, además de líquidos corporales, cepillados y secreciones.',
+	},
+	{
+		title: 'Etiquetas por muestra',
+		description:
+			'Imprime la etiqueta de cada laminilla o frasco desde la recepción para evitar confusiones entre pacientes.',
+	},
+	{
+		title: 'Seguimiento del caso',
+		description:
+			'Ve qué citologías están recibidas, en proceso o listas, cuáles son urgentes y cuáles faltan por entregar.',
+	},
+	{
+		title: 'Informes con tu formato',
+		description:
+			'Redacta la interpretación sobre una plantilla con tu logo y los datos del paciente, el médico y la sucursal ya llenos.',
+	},
+	{
+		title: 'Cobro por estudio',
+		description:
+			'Cada citología lleva su precio. Sabes en todo momento qué casos están pagados y cuáles por cobrar.',
+	},
+];
+
+const steps = [
+	{
+		title: 'Recepción',
+		description: 'Captura a la paciente, el médico solicitante y el tipo de citología. Imprime las etiquetas.',
+	},
+	{
+		title: 'Lectura',
+		description: 'El caso pasa a en proceso. Sube imágenes de la laminilla y marca los hallazgos.',
+	},
+	{
+		title: 'Interpretación',
+		description: 'Escribe la interpretación sobre tu plantilla de citología y revisa la vista previa.',
+	},
+	{
+		title: 'Entrega',
+		description: 'Exporta el informe en PDF o Word y registra la entrega y el pago.',
+	},
+];
+
+const faqs = [
+	{
+		question: '¿Qué tipos de citología puedo registrar?',
+		answer:
+			'Citología exfoliativa (Papanicolaou convencional y en base líquida, extendidos cervicovaginales y de uretra) y citología diversa (BAAF de tiroides, mama, ganglio y tejidos blandos, líquidos corporales, cepillados y secreción de pezón). Tú decides qué estudios incluye tu catálogo.',
+	},
+	{
+		question: '¿Puedo tener una plantilla de informe distinta para cada citología?',
+		answer:
+			'Sí. Puedes crear plantillas separadas, por ejemplo una para Papanicolaou y otra para BAAF, con las secciones y el texto base que usas en cada una.',
+	},
+	{
+		question: '¿Puedo agregar PCR a una citología?',
+		answer:
+			'Sí. La PCR, por ejemplo en base líquida, se registra como un estudio de tu catálogo y se agrega al mismo caso de la paciente.',
+	},
+	{
+		question: '¿Sirve para un laboratorio que solo hace citología?',
+		answer:
+			'Sí. Configuras únicamente los estudios de citología que realizas. Si después agregas histopatología, se maneja en el mismo sistema.',
+	},
+	{
+		question: '¿Necesito instalar algo?',
+		answer:
+			'No es obligatorio. Nori funciona en el navegador y también tiene app de escritorio para Windows y macOS con la misma cuenta.',
+	},
+];
+
+const faqSchema = {
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+	})),
+};
+---
+
+<MarketingLayout
+	title="Software de citología: Papanicolaou, base líquida y BAAF | Nori"
+	description="Software para laboratorios de citología: Papanicolaou convencional y en base líquida, BAAF y citología diversa con etiquetas, plantillas de informe y cobro por estudio."
+	breadcrumb={breadcrumb}
+	schema={[faqSchema]}
+>
+	<SolutionPage
+		eyebrow="Citología"
+		title="Software de citología para Papanicolaou, base líquida y BAAF"
+		intro="Registra cada citología desde la recepción, sigue su lectura y entrega el informe con tu formato. Nori separa citología exfoliativa y diversa, cada una con su precio y su plantilla."
+		heroImage={{ src: webEstudios, alt: 'Catálogo de estudios de citología en el software Nori' }}
+		features={features}
+		steps={steps}
+		detailImage={{ src: desktopCasos, alt: 'Lista de casos de citología con estado y urgencia en Nori' }}
+		detailTitle="Todas tus citologías a la vista"
+		detailText="La lista de casos muestra qué citologías están recibidas, en proceso o listas, cuáles son urgentes y cuáles faltan por cobrar. Se acabaron la libreta y la hoja de cálculo."
+		detailPoints={[
+			'Estados de recibido, en proceso y listo',
+			'Urgencias marcadas',
+			'Médico solicitante y sucursal en cada caso',
+			'Pagado o por cobrar en cada caso',
+		]}
+		faqs={faqs}
+		related={{ href: '/software-laboratorio-clinico/', label: 'Nori para laboratorios clínicos' }}
+		subpages={pathologySiblings('/software-citologia/')}
+	/>
+</MarketingLayout>

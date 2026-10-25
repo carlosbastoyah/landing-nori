@@ -9,10 +9,12 @@ import {
 	addOnPrice,
 	addOns,
 	analyticsLabels,
-	caseTiers,
+	breakEven,
+	ENTERPRISE_FROM_STUDIES,
 	formatMoney,
 	formatUnitPrice,
 	IVA_RATE,
+	monthlyCost,
 	pricingPlans,
 	standardPlans,
 	storageBlock,
@@ -33,11 +35,19 @@ const supportLevels = { standard: 'Estándar', priority: 'Prioritario', dedicate
 
 const formatCount = (value: number) => value.toLocaleString('es-MX');
 
-// Worked example for the tier explanation: 700 cases spans the first two tiers.
-const exampleCases = 700;
-const exampleFirst = caseTiers[0].to!;
-const exampleRest = exampleCases - exampleFirst;
-const exampleTotal = exampleFirst * caseTiers[0].unitPrice + exampleRest * caseTiers[1].unitPrice;
+// Worked example: Crecimiento with 700 studies goes 200 past its allowance.
+const examplePlan = standardPlans[1];
+const exampleStudies = 700;
+const exampleExtra = exampleStudies - examplePlan.includedStudies!;
+const exampleTotal = monthlyCost(examplePlan, exampleStudies);
+
+// Which plan suits each volume, from the break-even between neighbours.
+const planFit = standardPlans.map((plan, index) => {
+	const from = index === 0 ? 1 : breakEven(standardPlans[index - 1], plan);
+	const next = standardPlans[index + 1];
+	const to = next ? breakEven(plan, next) - 1 : ENTERPRISE_FROM_STUDIES;
+	return { plan, from, to };
+});
 
 function addOnCell(plan: PricingPlan, code: AddOnCode) {
 	const rule = plan.addOns[code];
@@ -55,10 +65,20 @@ const comparisonRows: { label: string; values: string[] }[] = [
 		),
 	},
 	{
-		label: 'Precio por caso',
+		label: 'Estudios incluidos al mes',
 		values: pricingPlans.map((plan) =>
-			plan.monthlyBasePrice === null ? 'Tarifa plana negociada' : 'Por tramos de volumen',
+			plan.includedStudies === null ? 'Precio fijo por estudio' : formatCount(plan.includedStudies),
 		),
+	},
+	{
+		label: 'Estudio extra',
+		values: pricingPlans.map((plan) =>
+			plan.extraStudyPrice === null ? 'Negociado' : formatUnitPrice(plan.extraStudyPrice),
+		),
+	},
+	{
+		label: 'Pago',
+		values: pricingPlans.map((plan) => (plan.monthlyBasePrice === null ? 'Mensual o anual' : 'Mensual')),
 	},
 	{
 		label: 'Almacenamiento incluido',
@@ -79,12 +99,12 @@ const pricingFaqs = [
 		answer: `No. Todos los precios están en pesos mexicanos (MXN) y se les suma el ${IVA_RATE * 100}% de IVA.`,
 	},
 	{
-		question: '¿Cómo se cobra cada caso?',
-		answer: `Por tramos progresivos: cada tramo se cobra a su propio precio. Con ${formatCount(exampleCases)} casos al mes pagas ${exampleFirst} × ${formatUnitPrice(caseTiers[0].unitPrice)} + ${exampleRest} × ${formatUnitPrice(caseTiers[1].unitPrice)} = ${formatMoney(exampleTotal)}, además de la cuota de tu plan.`,
+		question: '¿Cómo se cobran los estudios?',
+		answer: `Tu cuota incluye estudios cada mes y solo pagas los que pasen de ahí. Con ${formatCount(exampleStudies)} estudios en ${examplePlan.name} pagas la cuota de ${formatMoney(examplePlan.monthlyBasePrice!)} más ${exampleExtra} estudios extra × ${formatUnitPrice(examplePlan.extraStudyPrice!)}: ${formatMoney(exampleTotal)} al mes. Los estudios eliminados o cancelados no cuentan.`,
 	},
 	{
 		question: '¿Cobran por usuario?',
-		answer: 'No. El precio depende de tu plan y del volumen de casos, no de cuántas personas usan Nori.',
+		answer: 'No. El precio depende de tu plan y de los estudios que procesas, no de cuántas personas usan Nori.',
 	},
 	{
 		question: '¿Qué pasa si necesito más almacenamiento?',
@@ -136,7 +156,7 @@ const schema = [
 	title="Precios y planes | Nori, software para laboratorios"
 	breadcrumb={breadcrumb}
 	schema={schema}
-	description="Planes de Nori desde $690 MXN al mes: Esencial, Crecimiento, Escala y Enterprise. Cuota mensual más tarifa por caso que baja con tu volumen."
+	description="Planes de Nori desde $1,190 MXN al mes con estudios incluidos: Esencial, Crecimiento, Escala y Enterprise."
 >
 	<PageHeading title="Precios" breadcrumb={breadcrumb} />
 
@@ -146,7 +166,7 @@ const schema = [
 				<SectionEyebrow label="Planes transparentes" class="justify-center" />
 				<h2 class="cs-section-title mt-5">Paga por lo que procesa tu laboratorio</h2>
 				<p class="mt-4 text-ash-700">
-					Una cuota mensual según tu plan más un cargo por caso que baja conforme crece tu volumen. Sin cobro por
+					Cada plan incluye estudios al mes; los extra cuestan menos mientras más grande es tu plan. Sin cobro por
 					usuario. Precios en MXN más IVA.
 				</p>
 			</div>
@@ -160,38 +180,35 @@ const schema = [
 		<div class="cs-container">
 			<div class="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:items-center lg:gap-16">
 				<div>
-					<SectionEyebrow label="Tarifa por caso" />
-					<h2 class="cs-section-title mt-5">Entre más casos procesas, menos pagas por cada uno</h2>
+					<SectionEyebrow label="Estudios incluidos" />
+					<h2 class="cs-section-title mt-5">Elige el plan según los estudios que procesas</h2>
 					<p class="mt-5 leading-relaxed text-ash-700">
-						La tarifa por caso es la misma en Esencial, Crecimiento y Escala, y se cobra por tramos progresivos. Por
-						ejemplo, con {formatCount(exampleCases)} casos al mes pagas {exampleFirst} × {formatUnitPrice(caseTiers[0].unitPrice)}
-						+ {exampleRest} × {formatUnitPrice(caseTiers[1].unitPrice)} = <strong class="text-ink">{formatMoney(exampleTotal)}</strong>.
+						{`Tu cuota ya incluye estudios cada mes y solo pagas los que pasen de ahí. Por ejemplo, con ${formatCount(exampleStudies)} estudios al mes en ${examplePlan.name} pagas ${formatMoney(examplePlan.monthlyBasePrice!)} + ${exampleExtra} × ${formatUnitPrice(examplePlan.extraStudyPrice!)} = `}<strong
+							class="text-ink">{formatMoney(exampleTotal)}</strong
+						>.
 					</p>
 				</div>
 				<div class="cs-card overflow-hidden">
 					<table class="w-full text-left">
 						<thead class="bg-ink-deep text-white">
 							<tr>
-								<th scope="col" class="px-6 py-4 font-semibold">Casos al mes</th>
-								<th scope="col" class="px-6 py-4 text-right font-semibold">Precio por caso</th>
+								<th scope="col" class="px-6 py-4 font-semibold">Estudios al mes</th>
+								<th scope="col" class="px-6 py-4 text-right font-semibold">Te conviene</th>
 							</tr>
 						</thead>
 						<tbody>
 							{
-								caseTiers.map((tier) => (
+								planFit.map(({ plan, from, to }) => (
 									<tr class="border-t border-line first:border-t-0">
-										<td class="px-6 py-4 text-ink">
-											{tier.to === null
-												? `${formatCount(tier.from)} o más`
-												: `${formatCount(tier.from)} – ${formatCount(tier.to)}`}
-										</td>
-										<td class="px-6 py-4 text-right font-semibold text-ink">
-											{formatUnitPrice(tier.unitPrice)}
-											{tier.requiresNegotiation && <span class="ml-1 text-sm font-normal text-ash-700">(negociado)</span>}
-										</td>
+										<td class="px-6 py-4 text-ink">{`${formatCount(from)} – ${formatCount(to)}`}</td>
+										<td class="px-6 py-4 text-right font-semibold text-ink">{plan.name}</td>
 									</tr>
 								))
 							}
+							<tr class="border-t border-line">
+								<td class="px-6 py-4 text-ink">Más de {formatCount(ENTERPRISE_FROM_STUDIES)}</td>
+								<td class="px-6 py-4 text-right font-semibold text-ink">Enterprise</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
